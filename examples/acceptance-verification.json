@@ -1,0 +1,65 @@
+{
+  "verified_at": "2026-10-19T18:10:37.765Z",
+  "current_findings": 3,
+  "current_finding_revisions": 4,
+  "unassessed_element": "DUCT-02",
+  "original_gap_preserved": true,
+  "recapture_evidence_and_reassessment_separate": true,
+  "legacy_scope_records_unchanged": true,
+  "legacy_logical_records_sha256": "5de62e9b3b72ffffd21d5a4cb875c0d5a939d8b12d2b3b45aa8630bf02d0efa1",
+  "old_packets_unchanged": 2,
+  "pre_correction_packet_id": "packet-425f85fd-8739-4abe-a90f-2ac0943491d8",
+  "pre_correction_report_sha256": "c6be00357e572065c575d855c7c04d267648fa6b39063a79fddc77e84504ba5d",
+  "pre_correction_manifest_response_sha256": "cd4178574164edc0233046f893ffabb97893e90a09ba04bd7873c677e86c44b0",
+  "snapshot_revision_count": 3,
+  "current_visible_revision_id": "finding-revision-8e3b370a-272b-41ab-853f-bee592be8e55",
+  "local_draft_id": "draft-75098505-8965-4c35-b07d-9ea8f4685fbb",
+  "manual_rows": 5,
+  "corrected_packet": {
+    "id": "packet-9d0865e3-85bf-459b-a204-2d19773b341a",
+    "report_sha256": "e6a5c6b983c5675a726fa47393dbeb98249da2101610d9d629823a84868545ee",
+    "manifest_response_sha256": "872c00647daf4711d655fe39206f3e2bbdf794de13dcc28ab57beb67b508a8f2",
+    "snapshot_sha256": "e3f1ec30814e5ff0b81e14100f396d44d8cb0add9491bb8584ce6c70a8450f22",
+    "finding_revisions": 4
+  },
+  "automated_validation": {
+    "tests_passed": 77,
+    "tests_failed": 0,
+    "production_build": "passed",
+    "browser_console_errors_observed": 0
+  },
+  "pdf_inspection": {
+    "source_html_sha256": "c6be00357e572065c575d855c7c04d267648fa6b39063a79fddc77e84504ba5d",
+    "pdf_sha256": "d4afba6f5fe252f6990a96d1a4d6929457221bcab7c82a5a3ddbbfaa687c2967",
+    "converter": "LibreOfficeDev 26.8.0.0.alpha0 (AARCH64)",
+    "pages": 18,
+    "exact_quartz_export_reproduced": false,
+    "verified_media": [
+      {
+        "id": "fixture-capture-01",
+        "source_sha256": "ffa399e8aea72b4e349e7173031783447ccf660f2ce3d2b65f119a4f28fd6948",
+        "display_sha256": "74c59d889375db30190f071b0bcb7bd6d47a233b2016f4c9e3d899fe68aae206",
+        "method": "trusted_svg_lossless_png"
+      },
+      {
+        "id": "fixture-capture-02",
+        "source_sha256": "f2ab815a5935b7e2e90956d932c9797e3e4e3a8e13db2a212a03e718a74656c8",
+        "display_sha256": "8c1e9e567f0d89f64027e7d9a7c0c34e407912aa02c8f6f4298d0583c4e78aa0",
+        "method": "trusted_svg_lossless_png"
+      },
+      {
+        "id": "photo-6026f353-e121-4a89-9896-d9e6c51e5a49",
+        "source_sha256": "47030eb7dd374cc09c5312ae64b8dfe1a323b928160a086c242c1ec796470ba0",
+        "display_sha256": "47030eb7dd374cc09c5312ae64b8dfe1a323b928160a086c242c1ec796470ba0",
+        "method": "original_raster"
+      },
+      {
+        "id": "fixture-plan",
+        "source_sha256": "b654f972a7bfb2ab7beb6e44ea3414cea4f9a564ef315a543f384cbc539b46d0",
+        "display_sha256": "fc1a183f18051035ae9998d953b280dc03caf2acb91012341d70d9b36ef737cb",
+        "method": "trusted_svg_lossless_png"
+      }
+    ]
+  },
+  "supplied_logo_unchanged": true
+}

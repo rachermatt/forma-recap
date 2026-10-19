@@ -1,0 +1,9 @@
+Verify only the APS capabilities required for the next Forma Lens implementation slice.
+
+Read docs/04-api-capability-register.md and docs/08-sources.md. Check current official endpoint contracts, region, authorization context, project provisioning/permissions, request/response fields, formats, limits, and applicable access or billing requirements. Do not infer capabilities from product UI or an API name.
+
+Prioritize: authorized project/file/version reads; supported model viewing/metadata; Issue create and project configuration; evidence upload/attachment association. Native Photos, native pushpins, photogrammetry, ReCap SDK, Tandem, and RFIs are separate probes only when needed.
+
+For each capability, record the official source/date, minimal supported operation, exact mode and test identity/project access assumptions, result/status, and remaining limitation. If credentials or data are missing, mark live unverified and provide the smallest required input. Do not request broader permissions by default. Never put tokens, secrets, signed URLs, or customer imagery in the report.
+
+Read-only checks can proceed within authorized scope. A real write requires the exact test payload/destination and explicit approval. Do not use a destructive test. Do not implement guessed endpoints or turn a mock into a live-success claim.

@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "purpose": "Lossless display derivatives; original source media remains authoritative and unchanged.",
+  "renderer": "sharp/0.35.5 librsvg/2.63.2",
+  "media": [
+    {
+      "id": "fixture-plan",
+      "source_filename": "fixture-plan.svg",
+      "source_sha256": "b654f972a7bfb2ab7beb6e44ea3414cea4f9a564ef315a543f384cbc539b46d0",
+      "display_filename": "fixture-plan.png",
+      "display_sha256": "fc1a183f18051035ae9998d953b280dc03caf2acb91012341d70d9b36ef737cb",
+      "width": 1000,
+      "height": 600,
+      "method": "trusted_svg_lossless_png"
+    },
+    {
+      "id": "fixture-capture-01",
+      "source_filename": "fixture-capture-01.svg",
+      "source_sha256": "ffa399e8aea72b4e349e7173031783447ccf660f2ce3d2b65f119a4f28fd6948",
+      "display_filename": "fixture-capture-01.png",
+      "display_sha256": "74c59d889375db30190f071b0bcb7bd6d47a233b2016f4c9e3d899fe68aae206",
+      "width": 960,
+      "height": 540,
+      "method": "trusted_svg_lossless_png"
+    },
+    {
+      "id": "fixture-capture-02",
+      "source_filename": "fixture-capture-02.svg",
+      "source_sha256": "f2ab815a5935b7e2e90956d932c9797e3e4e3a8e13db2a212a03e718a74656c8",
+      "display_filename": "fixture-capture-02.png",
+      "display_sha256": "8c1e9e567f0d89f64027e7d9a7c0c34e407912aa02c8f6f4298d0583c4e78aa0",
+      "width": 960,
+      "height": 540,
+      "method": "trusted_svg_lossless_png"
+    }
+  ]
+}

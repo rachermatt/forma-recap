@@ -1,0 +1,97 @@
+{
+  "package": "Forma Lens / Forma ReCap Codex handoff",
+  "prepared_date": "2026-10-19",
+  "status": "documentation-and-proposed-contract-only",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "size_bytes": 5032,
+      "sha256": "51749343fa8a11da70764d9f5624980f2a6dc7d7889a9f647ffe23c88871f5db"
+    },
+    {
+      "path": "CODEX_START_HERE.md",
+      "size_bytes": 4575,
+      "sha256": "a83b4546a0f7f2e69c1ef7fe6e8eb32670099c9e6b1d57242cecfc6f7b42a22d"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 4648,
+      "sha256": "806b5ff979c3c4153b9d93086efaeae87be1c49ea742a8213e399c7cd42cf6df"
+    },
+    {
+      "path": "VALIDATION.md",
+      "size_bytes": 1625,
+      "sha256": "d5b7bc6ad5a8f7c88812383b05849922171647d4cf596494015fd685bca31e7c"
+    },
+    {
+      "path": "contracts/README.md",
+      "size_bytes": 2707,
+      "sha256": "46fa6e96f3413535f1979d8a943152987ba0ed76f372d8a836c25e33a98e0f99"
+    },
+    {
+      "path": "contracts/assessment.schema.json",
+      "size_bytes": 7185,
+      "sha256": "5396122f3e0f02461457eebebed820f98e3c280c4f3a2008f238335bde2cf92e"
+    },
+    {
+      "path": "contracts/example-assessment.json",
+      "size_bytes": 1838,
+      "sha256": "bbc88d3bd31741c7fb8d91a67d34f1ed421c38927dd120a1ab4d27b78c0a0cb2"
+    },
+    {
+      "path": "docs/01-product-scope.md",
+      "size_bytes": 5199,
+      "sha256": "a3bfcf12fddd8d9662da194e57ceda3e4ad81895de099f7149f9b2d33d8f6108"
+    },
+    {
+      "path": "docs/02-architecture-and-data-model.md",
+      "size_bytes": 9513,
+      "sha256": "fd0ed4bb58e721146f95c20f67dfdbedc1fd765f4a73d88f3c2c5b75b22e9c1b"
+    },
+    {
+      "path": "docs/03-implementation-plan.md",
+      "size_bytes": 8290,
+      "sha256": "a0489b1b0b3046c416455aefafd5716d18249c1abcdbd671b724d9e580749086"
+    },
+    {
+      "path": "docs/04-api-capability-register.md",
+      "size_bytes": 12823,
+      "sha256": "dac1e93f983f26fe32b94e4b90d1af29cdc131d14e861d3429b985ea265369f9"
+    },
+    {
+      "path": "docs/05-acceptance-and-validation.md",
+      "size_bytes": 12963,
+      "sha256": "c433fa269940ea193c26efd382e8728bdbd6d8809e0ac1b74e6cd022cedef9ef"
+    },
+    {
+      "path": "docs/06-pilot-playbook.md",
+      "size_bytes": 13124,
+      "sha256": "0345b6356c9be455e638f1e2a51eadb3fdeee96d0a40142206bca20dfd264419"
+    },
+    {
+      "path": "docs/07-decisions-and-risks.md",
+      "size_bytes": 5134,
+      "sha256": "648801a1cd32f1fa0b2a0d0bb645f30a87115b0d21baa49ca35a2a0e5e760422"
+    },
+    {
+      "path": "docs/08-sources.md",
+      "size_bytes": 8763,
+      "sha256": "9b3c9243aa4a3b77bb0fc5a4f96022f700504192e4d9b6813c5c7cf0ce4fdb75"
+    },
+    {
+      "path": "prompts/01-kickoff.txt",
+      "size_bytes": 2032,
+      "sha256": "a5214e45515690c5f6265f4553de85defa12878b4d46fa2f13d0fe103bb9527d"
+    },
+    {
+      "path": "prompts/02-capability-probe.txt",
+      "size_bytes": 1333,
+      "sha256": "7ccb0b49b56d1707282dbbba0059b191dad48f932de7476e4a8d0cd4fa8efa46"
+    },
+    {
+      "path": "prompts/03-review.txt",
+      "size_bytes": 1282,
+      "sha256": "2ed12963b4076b26cb50788753ef26d25ade7d847dfb904a2d9fbefb977b77de"
+    }
+  ]
+}

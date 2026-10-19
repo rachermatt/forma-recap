@@ -1,0 +1,13 @@
+Implement the first usable Forma Lens prototype using this handoff package.
+
+Read CODEX_START_HERE.md and AGENTS.md, then the product scope, architecture, implementation plan, API register, and acceptance scenarios. Inspect the target repository before choosing a stack or reusing code. Preserve unrelated changes.
+
+Start with Phase 0 and Phase 1. Build a persistent, locally runnable evidence-review workflow for one project/floor/trade and two capture dates. Use explicit fixture/live modes. Fixture mode must be unmistakably synthetic and must not execute live writes. Manual plan placement/model associations and human-reviewed observations are the initial scope.
+
+Use the proposed assessment contract consistently, or document a justified contract migration. Preserve capture dates and precision, model/scope versions, original evidence, reviewer corrections, and export reproducibility. Use observed_installed, not_observed, and needs_review without claiming certified completion or quantities.
+
+Continue into authorized live read integration when credentials and a suitable test project are available. Revalidate current official endpoint/auth/format requirements and record actual results. Missing credentials block only the dependent live checks; keep local implementation moving.
+
+Enable Issue publication only after the exact target/payload/evidence preview, user approval, authorization recheck, deduplication/reconciliation, and partial-attachment recovery are implemented. Do not assume native Photos upload, pushpin support, full ReCap APIs, or automatic progress verification.
+
+Deliver a working application, setup guide, environment-variable template, meaningful test results, synthetic end-to-end walkthrough, and a capability matrix distinguishing implementation, local tests, live verification, and blockers. Do not stop at a plan or scaffold when implementation can proceed. Do not deploy, publish, send messages, or create real customer records without the appropriate explicit instruction or in-app approval.

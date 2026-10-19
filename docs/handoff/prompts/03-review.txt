@@ -1,0 +1,7 @@
+Review the implemented Forma Lens increment against this package and the actual changes.
+
+Prioritize domain correctness and integration behavior: fixture/live isolation; project authorization and evidence access; model/scope/capture version provenance; capture-date precision; not_observed versus absence; manual placement versus registration; reviewer corrections; AI suggestions versus accepted assessments; reproducible exports; payload-scoped approval; Issue deduplication, uncertain-outcome reconciliation, and partial attachment recovery.
+
+Use docs/05-acceptance-and-validation.md as the scenario checklist. Run appropriate tests and the smallest real end-to-end journey available. Report commands actually run, results, untested capabilities, and defects by practical impact. Do not infer live success from compiling or mocking. Do not claim vision accuracy, measured quantities, inspection acceptance, payment approval, or ROI unless independent evidence supports that exact claim.
+
+Review secrets handling, source/dependency licensing, upload validation, and signed-link behavior relevant to this increment. Keep findings concrete. Fix authorized, reversible defects and rerun relevant checks. Do not deploy, publish, or send external communications as part of the review.

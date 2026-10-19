@@ -1,0 +1,36 @@
+{
+  "schema_version": "0.1.0",
+  "data_mode": "fixture",
+  "assessment_id": "synthetic-assessment-001",
+  "project_id": "synthetic-project-001",
+  "scope_ref": {"scope_id": "synthetic-ductwork-floor-1", "revision": 1, "trade": "Ductwork", "zone_id": "synthetic-zone-a"},
+  "model_ref": {
+    "model_id": "synthetic-model-001",
+    "version_id": "synthetic-model-version-001",
+    "viewable_id": null,
+    "element_refs": [{"model_id": "synthetic-model-001", "version_id": "synthetic-model-version-001", "external_id": "synthetic-duct-001"}]
+  },
+  "capture_ref": {
+    "capture_id": "synthetic-capture-002",
+    "content_sha256": null,
+    "captured_at": null,
+    "captured_date": "2026-10-15",
+    "date_precision": "date",
+    "date_source": "fixture",
+    "original_timezone": null,
+    "uploaded_at": "2026-10-16T14:00:00Z"
+  },
+  "placement": {
+    "method": "manual_plan_pin",
+    "plan_ref": {"file_id": "synthetic-plan-001", "version_id": "synthetic-plan-version-001"},
+    "normalized_pin": {"x": 0.35, "y": 0.62, "origin": "top_left"},
+    "is_verified_3d_registration": false
+  },
+  "state": "needs_review",
+  "rationale": "Synthetic contract example only. No underlying project footage or BIM is supplied by this package.",
+  "uncertainty_reason": "No real visual evidence exists for this example; it must never be represented as a real site observation.",
+  "evidence": [{"capture_id": "synthetic-capture-002", "derivative_id": null, "description": "Synthetic reference only; the implementing application must supply an actual labeled fixture before demonstrating media review."}],
+  "review": {"authority": "human_reviewer", "reviewer_id": "synthetic-reviewer-001", "reviewed_at": "2026-10-16T15:00:00Z", "revision": 1, "revision_id": "synthetic-revision-001"},
+  "previous_revision_id": null,
+  "ai_suggestion_id": null
+}

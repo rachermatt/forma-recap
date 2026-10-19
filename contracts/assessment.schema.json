@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:forma-lens:assessment:0.1.0",
+  "title": "Proposed Forma Lens reviewer assessment interchange contract",
+  "description": "A human-reviewed observation, not a measured quantity, inspection acceptance, or payment certification. Application-level invariants supplement this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "data_mode", "assessment_id", "project_id", "scope_ref", "model_ref", "capture_ref", "placement", "state", "rationale", "uncertainty_reason", "evidence", "review", "previous_revision_id", "ai_suggestion_id"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "data_mode": {"enum": ["fixture", "live"]},
+    "assessment_id": {"type": "string", "minLength": 1},
+    "project_id": {"type": "string", "minLength": 1},
+    "scope_ref": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scope_id", "revision", "trade", "zone_id"],
+      "properties": {
+        "scope_id": {"type": "string", "minLength": 1},
+        "revision": {"type": "integer", "minimum": 1},
+        "trade": {"type": "string", "minLength": 1},
+        "zone_id": {"type": "string", "minLength": 1}
+      }
+    },
+    "model_ref": {
+      "type": "object", "additionalProperties": false,
+      "required": ["model_id", "version_id", "element_refs"],
+      "properties": {
+        "model_id": {"type": "string", "minLength": 1},
+        "version_id": {"type": "string", "minLength": 1},
+        "viewable_id": {"type": ["string", "null"]},
+        "element_refs": {
+          "type": "array", "uniqueItems": true,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["model_id", "version_id", "external_id"],
+            "properties": {
+              "model_id": {"type": "string", "minLength": 1},
+              "version_id": {"type": "string", "minLength": 1},
+              "external_id": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    "capture_ref": {
+      "type": "object", "additionalProperties": false,
+      "required": ["capture_id", "content_sha256", "captured_at", "captured_date", "date_precision", "date_source", "original_timezone", "uploaded_at"],
+      "properties": {
+        "capture_id": {"type": "string", "minLength": 1},
+        "content_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "captured_at": {"type": ["string", "null"], "format": "date-time"},
+        "captured_date": {"type": ["string", "null"], "format": "date"},
+        "date_precision": {"enum": ["timestamp", "date", "unknown"]},
+        "date_source": {"enum": ["device_metadata", "file_metadata", "uploader_supplied", "fixture", "unknown"]},
+        "original_timezone": {"type": ["string", "null"]},
+        "uploaded_at": {"type": "string", "format": "date-time"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"date_precision": {"const": "timestamp"}}, "required": ["date_precision"]},
+          "then": {"properties": {"captured_at": {"type": "string", "format": "date-time"}, "captured_date": {"type": "string", "format": "date"}}}
+        },
+        {
+          "if": {"properties": {"date_precision": {"const": "date"}}, "required": ["date_precision"]},
+          "then": {"properties": {"captured_at": {"type": "null"}, "captured_date": {"type": "string", "format": "date"}}}
+        },
+        {
+          "if": {"properties": {"date_precision": {"const": "unknown"}}, "required": ["date_precision"]},
+          "then": {"properties": {"captured_at": {"type": "null"}, "captured_date": {"type": "null"}}}
+        }
+      ]
+    },
+    "placement": {
+      "type": "object", "additionalProperties": false,
+      "required": ["method", "plan_ref", "normalized_pin", "is_verified_3d_registration"],
+      "properties": {
+        "method": {"enum": ["manual_plan_pin", "explicit_model_association", "none"]},
+        "plan_ref": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "object", "additionalProperties": false, "required": ["file_id", "version_id"], "properties": {"file_id": {"type": "string", "minLength": 1}, "version_id": {"type": "string", "minLength": 1}}}
+          ]
+        },
+        "normalized_pin": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "object", "additionalProperties": false, "required": ["x", "y", "origin"], "properties": {"x": {"type": "number", "minimum": 0, "maximum": 1}, "y": {"type": "number", "minimum": 0, "maximum": 1}, "origin": {"const": "top_left"}}}
+          ]
+        },
+        "is_verified_3d_registration": {"const": false}
+      },
+      "allOf": [
+        {"if": {"properties": {"method": {"const": "manual_plan_pin"}}, "required": ["method"]}, "then": {"properties": {"plan_ref": {"type": "object"}, "normalized_pin": {"type": "object"}}}},
+        {"if": {"properties": {"method": {"enum": ["none", "explicit_model_association"]}}, "required": ["method"]}, "then": {"properties": {"plan_ref": {"type": "null"}, "normalized_pin": {"type": "null"}}}}
+      ]
+    },
+    "state": {"enum": ["observed_installed", "not_observed", "needs_review"]},
+    "rationale": {"type": "string", "minLength": 1},
+    "uncertainty_reason": {"type": ["string", "null"]},
+    "evidence": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["capture_id", "derivative_id", "description"],
+        "properties": {
+          "capture_id": {"type": "string", "minLength": 1},
+          "derivative_id": {"type": ["string", "null"]},
+          "description": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "review": {
+      "type": "object", "additionalProperties": false,
+      "required": ["authority", "reviewer_id", "reviewed_at", "revision", "revision_id"],
+      "properties": {
+        "authority": {"const": "human_reviewer"},
+        "reviewer_id": {"type": "string", "minLength": 1},
+        "reviewed_at": {"type": "string", "format": "date-time"},
+        "revision": {"type": "integer", "minimum": 1},
+        "revision_id": {"type": "string", "minLength": 1}
+      }
+    },
+    "previous_revision_id": {"type": ["string", "null"]},
+    "ai_suggestion_id": {"type": ["string", "null"]}
+  },
+  "allOf": [
+    {"if": {"properties": {"state": {"enum": ["not_observed", "needs_review"]}}, "required": ["state"]}, "then": {"properties": {"uncertainty_reason": {"type": "string", "minLength": 1}}}},
+    {"if": {"properties": {"data_mode": {"const": "live"}}, "required": ["data_mode"]}, "then": {"properties": {"capture_ref": {"properties": {"content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "date_source": {"enum": ["device_metadata", "file_metadata", "uploader_supplied", "unknown"]}}}}}},
+    {"if": {"properties": {"review": {"properties": {"revision": {"const": 1}}, "required": ["revision"]}}, "required": ["review"]}, "then": {"properties": {"previous_revision_id": {"type": "null"}}}, "else": {"properties": {"previous_revision_id": {"type": "string", "minLength": 1}}}}
+  ]
+}
