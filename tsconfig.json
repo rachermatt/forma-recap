@@ -6,5 +6,5 @@
     "allowSyntheticDefaultImports":true, "types":["node","vite/client"],
     "erasableSyntaxOnly":true
   },
-  "include":["src","server","tests","vite.config.ts"]
+  "include":["src","server","api","tests","vite.config.ts"]
 }

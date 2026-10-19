@@ -21,6 +21,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env) {
 }
 type Config = ReturnType<typeof loadConfig>;
 type LocalSession = { csrf: string; expires: number };
+export type PublicDemoDeployment = {kind:'public_demo';read_only:true;label:'Public synthetic demo';persistence:'fixed_snapshot';allowedOrigins:string[]};
 const token = () => randomBytes(32).toString('hex');
 function fail(status:number,message:string): never { throw Object.assign(new Error(message),{status}); }
 function cookies(req:http.IncomingMessage) {
@@ -37,7 +38,10 @@ async function body(req:http.IncomingMessage, limit=65536) {
 }
 function equal(a:string,b:string) { const x=Buffer.from(a),y=Buffer.from(b);return x.length===y.length && timingSafeEqual(x,y); }
 
-export function createApp(config:Config, deps: {store?:any; aps?:any} = {}) {
+export function createApp(config:Config, deps: {store?:any; aps?:any; deployment?:PublicDemoDeployment} = {}) {
+  const publicDemo=deps.deployment?.kind==='public_demo';
+  if(publicDemo && (config.mode!=='fixture' || config.clientId || config.clientSecret || config.hubId || deps.aps)) throw new Error('Public synthetic deployments cannot use live mode or APS credentials/adapters.');
+  const deployment=publicDemo?{kind:'public_demo',read_only:true,label:'Public synthetic demo',persistence:'fixed_snapshot'}:null;
   mkdirSync(config.dataDir,{recursive:true,mode:0o700});
   const store=deps.store || createStore({dbPath:resolve(config.dataDir,`${config.mode}.sqlite`),mediaDir:resolve(ROOT,'server/media'),mode:config.mode});
   const aps=deps.aps || createAps({mode:config.mode,clientId:config.clientId,clientSecret:config.clientSecret,callback:config.callback,hubId:config.hubId});
@@ -47,6 +51,7 @@ export function createApp(config:Config, deps: {store?:any; aps?:any} = {}) {
   const workflowStores=new Map<string,ReturnType<typeof createWorkflows>>();
   function workspace(name:string) {
     if(config.mode!=='fixture') fail(409,'Local review is unavailable in live mode. Verified project/model access is required before live review.');
+    if(publicDemo && name==='local') fail(409,'Local photographs and private project workspaces are available only in the local application. This public deployment contains fixed synthetic evidence.');
     if(!['fixture','local'].includes(name)) fail(404,'Review workspace not found.');
     if(!reviewStores.has(name)) {
       const review=createReviewStore({dbPath:resolve(config.dataDir,`${name}-review.sqlite`),uploadDir:resolve(config.dataDir,`${name}-originals`),workspace:name as 'fixture'|'local',legacyStore:store,...(name==='fixture'?{syntheticImportPath:resolve(ROOT,'server/media/synthetic-recapture.png')}:{})});
@@ -79,15 +84,17 @@ export function createApp(config:Config, deps: {store?:any; aps?:any} = {}) {
     const send=(value:any,status=200)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify(value));};
     try {
       const host=req.headers.host || '';
-      if(!/^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(host)) fail(403,'Invalid local host.');
-      const origin=`http://${host}`;
+      if(publicDemo ? !deps.deployment!.allowedOrigins.includes(`https://${host.toLowerCase()}`) : !/^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(host)) fail(403,publicDemo?'Invalid public demo host.':'Invalid local host.');
+      const origin=`${publicDemo?'https':'http'}://${publicDemo?host.toLowerCase():host}`;
       if(req.headers.origin && req.headers.origin!==origin) fail(403,'Cross-origin requests are not allowed.');
       if(req.headers['sec-fetch-site']==='cross-site' && !req.url?.startsWith('/?')) fail(403,'Cross-site requests are not allowed.');
       const url=new URL(req.url || '/',origin), path=url.pathname;
-      const jar=cookies(req);
+      if(publicDemo && !['GET','HEAD'].includes(req.method || 'GET')) fail(405,'This public synthetic demo is read-only. Run the local application to import evidence, edit reviews or create packets.');
+      if(publicDemo && (path.startsWith('/auth/') || path==='/api/aps/projects' || (path==='/' && ['code','state','error'].some(key=>url.searchParams.has(key))))) fail(403,'APS sign-in and external integrations are disabled in the public synthetic demo.');
+      const jar=publicDemo?{}:cookies(req);
       let local=localSessions.get(jar.recap_local || '');
       if(local && local.expires<Date.now()) { localSessions.delete(jar.recap_local); local=undefined; }
-      const requireSession=()=>{if(!local) fail(401,'Open Forma ReCap to start a local review session.');};
+      const requireSession=()=>{if(!publicDemo && !local) fail(401,'Open Forma ReCap to start a local review session.');};
       if(!['GET','HEAD'].includes(req.method || 'GET')) {
         requireSession();
         if(!equal(String(req.headers['x-csrf-token'] || ''),local!.csrf)) fail(403,'Invalid request token. Reload the app and retry.');
@@ -101,12 +108,12 @@ export function createApp(config:Config, deps: {store?:any; aps?:any} = {}) {
         res.writeHead(303,{Location:'/'});res.end();return;
       }
       if(path==='/api/bootstrap' && req.method==='GET') {
-        if(!local) { const id=token();local={csrf:token(),expires:Date.now()+12*3600000};localSessions.set(id,local);setCookie('recap_local',id); }
+        if(!publicDemo && !local) { const id=token();local={csrf:token(),expires:Date.now()+12*3600000};localSessions.set(id,local);setCookie('recap_local',id); }
         const original=config.mode==='fixture'?store.bootstrap():{mode:'live',project:null,model:null,scope:null,plan:null,captures:[],assessments:[],exports:[]};
         const base={...original,captures:original.captures.map((capture:any)=>({...capture,display_url:`/api/media/${encodeURIComponent(capture.capture_id)}/display`})),plan:original.plan?{...original.plan,display_url:`/api/media/${encodeURIComponent(original.plan.file_id)}/display`}:null};
-        send({...base,mode:config.mode,csrfToken:local.csrf,user:{id:config.mode==='fixture'?'fixture-reviewer':'local-session',name:config.mode==='fixture'?'Local demo reviewer':'Local APS session'},capabilities});return;
+        send({...base,mode:config.mode,csrfToken:publicDemo?'':local!.csrf,user:{id:config.mode==='fixture'?'fixture-reviewer':'local-session',name:config.mode==='fixture'?'Local demo reviewer':'Local APS session'},capabilities,...(deployment?{deployment}:{})});return;
       }
-      if(path==='/api/integration/status' && req.method==='GET') {requireSession();send(aps.status(jar.aps_session));return;}
+      if(path==='/api/integration/status' && req.method==='GET') {requireSession();send({...aps.status(jar.aps_session),...(publicDemo?{read_only:true,message:'Public synthetic demo. APS sign-in, private photograph workspaces and external operations are disabled. Use the local application for editable review.'}:{})});return;}
       if(path==='/auth/login' && req.method==='GET') {
         requireSession();const result=await aps.login();setCookie('aps_oauth_state',result.state,600);
         res.writeHead(302,{Location:result.url});res.end();return;
@@ -118,7 +125,7 @@ export function createApp(config:Config, deps: {store?:any; aps?:any} = {}) {
         requireSession();
         const {review,workflows}=workspace(v2[1]);
         const route=v2[2]; let match:RegExpMatchArray|null;
-        if(route==='bootstrap' && req.method==='GET') {send({...review.bootstrap(),...workflows.bootstrap(),coverage:review.coverage({})});return;}
+        if(route==='bootstrap' && req.method==='GET') {send({...review.bootstrap(),...workflows.bootstrap(),coverage:review.coverage({}),...(deployment?{deployment}:{})});return;}
         if(route==='configure' && req.method==='POST') {send(review.configure(await body(req)),201);return;}
         if(route==='findings' && req.method==='POST') {send(review.saveFinding(await body(req)),201);return;}
         if((match=route.match(/^findings\/([^/]+)\/history$/)) && req.method==='GET') {send(review.findingHistory(decodeURIComponent(match[1])));return;}
