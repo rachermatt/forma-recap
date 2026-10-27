@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0.0",
+  "verified_at": "2026-10-27T23:52:49.252Z",
+  "population": "Isolated synthetic M1 browser QA; original seed and working data not mutated",
+  "baseline_source_commit": "ee463ce",
+  "seed_unchanged": true,
+  "counts": {
+    "current_findings": 4,
+    "finding_revisions": 6,
+    "manual_reconciliation_rows": 6,
+    "unknown_quantities": 4,
+    "unassessed_duct_02": true,
+    "recapture_tasks": 1,
+    "recapture_events": 3,
+    "local_drafts": 1
+  },
+  "saved_qa_finding": {
+    "finding_id": "finding-8ec4f013-0bcc-4ad2-8920-dfedde9c9a72",
+    "revision": 2,
+    "revision_id": "finding-revision-c5d5da76-aaf1-4dd9-9822-eab473e72777",
+    "previous_revision_id": "finding-revision-4fd289bd-c93e-48d4-b94e-5d0ea30b8dc7",
+    "capture_id": "photo-6026f353-e121-4a89-9896-d9e6c51e5a49",
+    "element_id": "DUCT-01",
+    "model_version_id": "fixture-model-v7"
+  },
+  "packet_integrity": [
+    {
+      "id": "packet-0a352aff-d4f2-4f1b-bca3-a9614a69f617",
+      "report_sha256": "099feebab68b85e9600236c44527f4c38e3e422d1a89cc900f1df6b242634493",
+      "manifest_matches_original": true
+    },
+    {
+      "id": "packet-61457ca6-39f2-4a97-a8c7-057d027315c6",
+      "report_sha256": "32ef5d2a4978c68da8eb9584cf90458c60647b94dab6d0ccd3cf2fbf4b58961c",
+      "manifest_matches_original": true
+    },
+    {
+      "id": "packet-425f85fd-8739-4abe-a90f-2ac0943491d8",
+      "report_sha256": "c6be00357e572065c575d855c7c04d267648fa6b39063a79fddc77e84504ba5d",
+      "manifest_matches_original": true
+    },
+    {
+      "id": "packet-9d0865e3-85bf-459b-a204-2d19773b341a",
+      "report_sha256": "e6a5c6b983c5675a726fa47393dbeb98249da2101610d9d629823a84868545ee",
+      "manifest_matches_original": true
+    }
+  ],
+  "original_media_integrity": [
+    {
+      "id": "fixture-plan",
+      "sha256": "b654f972a7bfb2ab7beb6e44ea3414cea4f9a564ef315a543f384cbc539b46d0",
+      "bytes": 1466
+    },
+    {
+      "id": "fixture-capture-01",
+      "sha256": "ffa399e8aea72b4e349e7173031783447ccf660f2ce3d2b65f119a4f28fd6948",
+      "bytes": 3022
+    },
+    {
+      "id": "fixture-capture-02",
+      "sha256": "f2ab815a5935b7e2e90956d932c9797e3e4e3a8e13db2a212a03e718a74656c8",
+      "bytes": 3187
+    },
+    {
+      "id": "photo-6026f353-e121-4a89-9896-d9e6c51e5a49",
+      "sha256": "47030eb7dd374cc09c5312ae64b8dfe1a323b928160a086c242c1ec796470ba0",
+      "bytes": 96047
+    }
+  ],
+  "checks": {
+    "npm_test": {
+      "passed": 101,
+      "failed": 0,
+      "skipped": 0,
+      "new_state_navigation_tests": 14
+    },
+    "production_build": "passed",
+    "diff_check": "passed",
+    "repeated_back_guard_browser": "passed_stay_and_continue",
+    "back_during_primary_navigation_guard": "passed_stay_and_continue",
+    "readonly_boundary_http_tests": "passed"
+  },
+  "planning_baseline": {
+    "ticket_count": 23,
+    "BACKLOG.md_sha256": "89d6cfad9bd448b18b1c6146f9f2540c05c680beba16a769898b312f749bc4e0",
+    "BACKLOG.json_sha256": "5d9cfea69c041a1e54030f4df75323f57c40146234cb1502353808dd91043222",
+    "unchanged_from_archive": true
+  }
+}
