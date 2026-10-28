@@ -4,6 +4,8 @@ A local evidence-review prototype for comparing dated site captures against a de
 
 The interface follows the Forma Build visual references, with a white product header, light tool navigation and blue actions. The header uses the supplied **AUTODESK Forma ReCap** PNG unchanged, with proportional CSS display scaling. The previous SVG compositions remain historical alternates. See [appearance notes](docs/APPEARANCE.md) and [logo assets](docs/BRAND-ASSETS.md).
 
+Version **0.3** adds a weekly decision queue, BIM-optional stable scope and dossiers, explicit reference mappings, planned field assignments, a persistent browser capture queue, versioned measurement templates, local follow-through tracking, purpose-based packets, lookahead/handover checklists and a bounded research evaluation workbench. [Delivery status, walkthrough and remaining dependencies](docs/development/BROADER-STATUS.md). These are local human-reviewed workflows; shared mobile deployment, live Autodesk publication and actual recognition accuracy remain unverified.
+
 ## Run
 
 Requires Node.js **24.19 or later**. Get the source:
@@ -41,6 +43,15 @@ npm run demo
 Open **http://localhost:8080/**. If another local instance is running, use `PORT=8081 npm run demo` and open **http://localhost:8081/**. The demo uses isolated `data/demo/`, does not load `.env`, and disables APS credentials. Setup refuses an existing nonempty target and leaves the working `data/fixture*.sqlite`, uploaded originals and `.env` untouched. Review edits in the demo persist independently.
 
 See [demo setup and seed validation](docs/DEMO.md) and the [saved acceptance walkthrough](docs/ACCEPTANCE-WALKTHROUGH.md). To use a different new directory, pass the same `--data-dir` to both commands; the original working application still runs with `npm start`.
+
+To create the additional saved 0.3 example in a **new empty directory**:
+
+```sh
+npm run demo:broader -- --data-dir data/broader-demo
+PORT=8083 npm run demo -- --data-dir data/broader-demo
+```
+
+Open **http://localhost:8083/**. Setup first restores the original seed, then records a synthetic drawing-only scope journey, planned capture, idempotent receipt, independent findings, manual quantities, local RFI, first packet, later correction and successor packet. It refuses an existing directory and never loads `.env`. It stores record IDs in `broader-demo-records.json` in that isolated directory. The original four packets remain unchanged. [Example weekly report](docs/development/examples/weekly-review.html) and [corrected successor](docs/development/examples/concealment-successor.html) are fixed copies from the verified example.
 
 ## Try the element workflow
 

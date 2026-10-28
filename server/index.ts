@@ -8,6 +8,11 @@ import { createAps } from './aps.ts';
 import { createReviewStore } from './review.ts';
 import { createWorkflows } from './workflows.ts';
 import { displayMedia } from './media-render.ts';
+import { createScopeOperations } from './scope-operations.ts';
+import { createFieldOperations } from './field-operations.ts';
+import { createResearchOperations } from './research-operations.ts';
+import { createCommercialOperations } from './commercial-operations.ts';
+import { createHash } from 'node:crypto';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export function loadConfig(env: NodeJS.ProcessEnv = process.env) {
@@ -49,6 +54,7 @@ export function createApp(config:Config, deps: {store?:any; aps?:any; deployment
   // Lazy creation keeps live mode entirely separate from local/synthetic sources.
   const reviewStores=new Map<string,ReturnType<typeof createReviewStore>>();
   const workflowStores=new Map<string,ReturnType<typeof createWorkflows>>();
+  const operationStores=new Map<string,any>();
   function workspace(name:string) {
     if(config.mode!=='fixture') fail(409,'Local review is unavailable in live mode. Verified project/model access is required before live review.');
     if(publicDemo && name==='local') fail(409,'Local photographs and private project workspaces are available only in the local application. This public deployment contains fixed synthetic evidence.');
@@ -57,10 +63,46 @@ export function createApp(config:Config, deps: {store?:any; aps?:any; deployment
       const review=createReviewStore({dbPath:resolve(config.dataDir,`${name}-review.sqlite`),uploadDir:resolve(config.dataDir,`${name}-originals`),workspace:name as 'fixture'|'local',legacyStore:store,...(name==='fixture'?{syntheticImportPath:resolve(ROOT,'server/media/synthetic-recapture.png')}:{})});
       try {
         const workflows=createWorkflows({db:review.db,context:()=>review.bootstrap(),getFindingRevision:(id:string)=>review.getFindingRevision(id),getCapture:(id:string)=>review.getCapture(id)});
+        const base=():any=>({...review.bootstrap(),...workflows.bootstrap()});
+        const scopes=createScopeOperations({db:review.db,context:base,getCapture:review.getCapture,getReviewTemplate:(id:string)=>field.bootstrap().requirement_revisions.find((r:any)=>r.revision_id===id)??fail(404,'Review template unavailable.')});
+        const extended=()=>{const s=scopes.bootstrap();const b=base();return {...b,items:s.items,scope_finding_revisions:s.finding_revisions,all_finding_revisions:[...new Map([...b.finding_revisions,...s.finding_revisions].map((f:any)=>[f.revision_id,f])).values()]};};
+        const field=createFieldOperations({db:review.db,context:extended,getItem:scopes.getItem,getCapture:review.getCapture,importPhoto:review.importPhoto});
+        const research=createResearchOperations({db:review.db,context:extended,getItem:scopes.getItem,getCapture:review.getCapture});
+        const historicalPackets=()=>review.bootstrap().exports.map((p:any)=>({id:p.id,manifest:review.getExport(p.id).manifest}));
+        const commercial=createCommercialOperations({db:review.db,context:extended,getItem:scopes.getItem,getCapture:review.getCapture,historicalPackets,packetSnapshot:(selection:any)=>{
+          const s=scopes.bootstrap();const selected=new Set<string>(selection.item_ids);const b=base();
+          const revisions=[...new Map([...b.finding_revisions,...s.finding_revisions].map((f:any)=>[f.revision_id,f])).values()].filter((f:any)=>selected.has(f.item_id??`element:${f.model_ref?.element_id}`));
+          const captureIds=new Set<string>(revisions.map((f:any)=>f.capture_ref.capture_id));
+          const fieldSnapshot=field.snapshot([...selected]),researchSnapshot=research.snapshot([...selected]);
+          for(const a of fieldSnapshot.assignment_events){if(a.example_capture_id)captureIds.add(a.example_capture_id);for(const e of a.supplied_evidence??[])captureIds.add(e.capture_id);}
+          for(const t of b.tasks)if(selected.has(`element:${t.element_id}`)){if(t.source_capture_id)captureIds.add(t.source_capture_id);if(t.new_capture_id)captureIds.add(t.new_capture_id);}
+          for(const r of researchSnapshot.records)if(r.capture_id)captureIds.add(r.capture_id);
+          const selectedCommercial:any=commercial.snapshot({item_ids:[...selected],record_ids:selection.commercial_record_ids??[],include_metrics:false});
+          const selectedRecordIds=new Set(selectedCommercial.records.map((r:any)=>r.id));selectedCommercial.comparisons=commercial.comparisons().filter((q:any)=>q.record_ids.every((id:string)=>selectedRecordIds.has(id)));
+          for(const r of selectedCommercial.records)if(r.kind==='comparison'){if(r.capture_a?.capture_id)captureIds.add(r.capture_a.capture_id);if(r.capture_b?.capture_id)captureIds.add(r.capture_b.capture_id);}
+          const media=[...captureIds].map(id=>{const capture=review.getCapture(id);const original=review.getMedia(id);const display=review.getDisplayMedia(id);const digest=createHash('sha256').update(original.body).digest('hex');if(digest!==capture.capture_ref.content_sha256)fail(409,'Original media changed; export stopped.');return {id,title:capture.title,content_type:original.contentType,content_sha256:digest,original_base64:original.body.toString('base64'),display_content_type:display.contentType,display_base64:display.body.toString('base64'),display_sha256:display.display_sha256};});
+          const workflowsSnapshot=workflows.snapshot({reconciliation_entry_ids:selection.reconciliation_entry_ids??[],draft_ids:selection.draft_ids??[]});
+          for(const q of workflowsSnapshot.reconciliations)if(!q.element_ids.every((id:string)=>selected.has(`element:${id}`)))fail(400,'Selected reconciliation contains scope outside this packet.');
+          for(const d of workflowsSnapshot.drafts)if(!d.evidence.every((e:any)=>selected.has(`element:${e.finding.model_ref.element_id}`)))fail(400,'Selected draft contains scope outside this packet.');
+          const scopeSnapshot=scopes.snapshot();
+          return {workspace:name,data_mode:name==='fixture'?'synthetic':'local',project:b.project,scope:{items:s.items.filter((i:any)=>selected.has(i.item_id)),item_revisions:scopeSnapshot.item_revisions.filter((i:any)=>selected.has(i.item_id)),finding_revisions:s.finding_revisions.filter((f:any)=>selected.has(f.item_id)),findings:s.findings.filter((f:any)=>selected.has(f.item_id)),mappings:scopeSnapshot.mappings.filter((m:any)=>[...m.source_item_ids,...m.target_item_ids].every((id:string)=>selected.has(id))),conflicts:scopeSnapshot.conflicts.filter((c:any)=>selected.has(c.item_id))},existing:{project:b.project,findings:b.findings.filter((f:any)=>selected.has(`element:${f.model_ref.element_id}`)),finding_revisions:revisions,captures:b.captures.filter((c:any)=>captureIds.has(c.capture_id)),tasks:b.tasks.filter((t:any)=>selected.has(`element:${t.element_id}`)),task_events:b.task_events.filter((t:any)=>selected.has(`element:${t.task.element_id}`)),reconciliations:workflowsSnapshot.reconciliations,drafts:workflowsSnapshot.drafts},workflows:workflowsSnapshot,field:fieldSnapshot,commercial:selectedCommercial,research:researchSnapshot,queue:combinedQueue({as_of_date:selection.as_of_date??new Date().toISOString().slice(0,10),freshness_days:selection.freshness_days??14}).exceptions.filter((r:any)=>selected.has(r.item_id)),media,limitations:['Manual evidence and authored quantities only.','No verified external submission, registration, inspection acceptance or AI accuracy.']};
+        }});
+        const combinedQueue=(filters:Record<string,any>={})=>{
+          const scope=scopes.bootstrap(filters), f=field.bootstrap(), c=commercial.bootstrap(), r=research.bootstrap();
+          const extra:any[]=[]; const asOf=scope.policy.as_of_date;
+          for(const a of f.assignments) if(a.review_status!=='sufficient')extra.push({id:`field:${a.assignment_id}`,item_id:a.item_id,kind:a.status==='unable'?'unable_to_capture':a.supplied_evidence.length?'awaiting_reassessment':a.due_date<asOf?'overdue_assignment':'planned_evidence',reason:a.supplied_evidence.length?'Evidence supplied; explicit sufficiency/reassessment is still required.':`Required ${a.requirement_snapshot.viewpoint} · due ${a.due_date}`,next_action:a.supplied_evidence.length?'Review supplied evidence':'Open field assignment',owner:a.assignee,due_date:a.due_date,source_refs:[a.revision_id],destination:'assignments'});
+          for(const q of c.comparisons)if(q.delta!==0&&(!filters.period_start||(q.period_start===filters.period_start&&q.period_end===filters.period_end)))for(const id of q.item_ids)extra.push({id:`quantity:${q.id}:${id}`,item_id:id,kind:q.delta===null?'quantity_basis_unresolved':'quantity_difference',reason:q.delta===null?q.reason:`Reported minus supported: ${q.delta} ${q.unit} (${q.period_start} to ${q.period_end}).`,next_action:'Reconcile source and measurement basis',source_refs:q.record_ids,destination:'quantities'});
+          for(const d of c.followups)extra.push({id:`followup:${d.id}`,item_id:d.item_ids[0],kind:'local_followup',reason:'Local action awaits a verified destination and explicit submission.',next_action:'Review local draft and capability blocker',source_refs:[d.revision_id],destination:'drafts'});
+          for(const follow of r.follow_ups??[])if(follow.needs_review||follow.tracking_status!=='closed')extra.push({id:`external-followup:${follow.action_id}`,item_id:follow.findings[0]?.item_id??(follow.findings[0]?.model_ref?.element_id?`element:${follow.findings[0].model_ref.element_id}`:null),kind:follow.needs_review?'action_correction_review':'unanswered_followup',reason:follow.needs_review?'A relied-on finding has a newer correction.':`Local follow-up ${follow.tracking_status}; external response/access unverified.`,next_action:'Inspect the preserved action and response history',owner:follow.owner,due_date:follow.due_date,source_refs:[follow.record_id],destination:'research'});
+          for(const l of c.lookahead)for(const id of l.item_ids)extra.push({id:`lookahead:${l.id}:${id}`,item_id:id,kind:'lookahead_review',reason:`${l.title} needs ${l.stage} evidence before ${l.planned_start}; ${l.mapping_confirmed?'mapping manually confirmed':'scope mapping unresolved'}.`,next_action:'Check prerequisites and stage/billing basis',due_date:l.planned_start,source_refs:[l.revision_id],destination:'lookahead'});
+          const extras=extra.filter(e=>{const i=scope.items.find((i:any)=>i.item_id===e.item_id);return i&&(!filters.trade||i.trade.toLowerCase().includes(String(filters.trade).toLowerCase()))&&(!filters.location||i.location.toLowerCase().includes(String(filters.location).toLowerCase()))&&(!filters.owner||String(e.owner??'').toLowerCase().includes(String(filters.owner).toLowerCase()))&&(!filters.due_before||(e.due_date&&e.due_date<=filters.due_before));});
+          const exceptions=[...scope.queue.exceptions,...extras].map(e=>({...e,id:e.id??e.exception_id,exception_id:e.exception_id??e.id,category:e.category??e.kind,kind:e.kind??e.category}));return {...scope.queue,exceptions,count:exceptions.length};
+        };
+        operationStores.set(name,{scopes,field,research,commercial,base,extended,combinedQueue});
         workflowStores.set(name,workflows);reviewStores.set(name,review);
       } catch(error) {review.close();throw error;}
     }
-    return {review:reviewStores.get(name)!,workflows:workflowStores.get(name)!};
+    return {review:reviewStores.get(name)!,workflows:workflowStores.get(name)!,operations:operationStores.get(name)!};
   }
   const capabilities = [
     {name:'Evidence review',implemented:true,locally_tested:true,live_verified:false,status:'Local fixture workflow'},
@@ -120,6 +162,26 @@ export function createApp(config:Config, deps: {store?:any; aps?:any; deployment
       }
       if(path==='/auth/logout' && req.method==='POST') {aps.logout(jar.aps_session);setCookie('aps_session','',0);send({ok:true});return;}
       if(path==='/api/aps/projects' && req.method==='GET') {requireSession();const result=await aps.projects(jar.aps_session);send({projects:result.data});return;}
+      const v3=path.match(/^\/api\/v3\/([^/]+)\/(.+)$/);
+      if(v3) {
+        requireSession(); const {review,operations}=workspace(v3[1]); const {scopes,field,research,commercial,base,combinedQueue}=operations; const route=v3[2];
+        const filters=Object.fromEntries([...url.searchParams].map(([k,v])=>[k,k==='freshness_days'?Number(v):v]));
+        if(route==='bootstrap'&&req.method==='GET') {
+          const scope=scopes.bootstrap(filters), f=field.bootstrap(), c=commercial.bootstrap(), r=research.bootstrap();
+          send({schema_version:'0.3.0',workspace:v3[1],scope,field:f,commercial:c,research:r,existing:base(),queue:combinedQueue(filters),...(deployment?{deployment}:{})});return;
+        }
+        if(route==='configure'&&req.method==='POST'){send(review.configure(await body(req)),201);return;}
+        if(route==='scope/bootstrap'&&req.method==='GET'){send(scopes.bootstrap(filters));return;}
+        const dossier=route.match(/^dossier\/(.+)$/);if(dossier&&req.method==='GET'){const id=decodeURIComponent(dossier[1]);const d=scopes.dossier(id);send({...d,field:field.bootstrap().assignments.filter((a:any)=>a.item_id===id),commercial:commercial.bootstrap().records.filter((r:any)=>r.item_ids?.includes(id)),asset_proposals:research.bootstrap().asset_proposals.filter((a:any)=>a.item_id===id)});return;}
+        const packet=route.match(/^packets\/([^/]+)\/(manifest|report)$/);if(packet&&req.method==='GET'){const p=commercial.getPacket(packet[1]);res.setHeader('Content-Disposition',`${url.searchParams.get('inline')==='1'?'inline':'attachment'}; filename="forma-recap-${packet[1]}.${packet[2]==='manifest'?'json':'html'}"`);if(packet[2]==='manifest')send(p.manifest);else{res.setHeader('Content-Security-Policy',"sandbox; default-src 'none'; img-src data:; style-src 'unsafe-inline'");res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});res.end(p.html);}return;}
+        const getRoutes:Record<string,()=>any>={'field/bootstrap':field.bootstrap,'field/readiness':field.readiness,'research/bootstrap':research.bootstrap,'commercial/bootstrap':commercial.bootstrap};
+        if(req.method==='GET'&&getRoutes[route]){send(getRoutes[route]());return;}
+        const postRoutes:Record<string,(input:any)=>any>={'scope/items':scopes.saveItem,'scope/findings':scopes.saveFinding,'scope/mappings':scopes.saveMapping,'scope/conflicts':scopes.saveConflict,'field/requirements':field.saveRequirement,'field/assignments':field.saveAssignment,'field/events':field.recordEvent,'field/capture':field.receiveCapture,'field/release':field.saveRelease,'research/capability':research.saveCapability,'research/asset-proposal':research.saveAssetProposal,'research/experiment':research.saveExperiment,'research/case':research.saveCase,'research/proposal':research.saveProposal,'research/decision':research.saveDecision,'research/evaluate':research.evaluate,'research/follow-up':research.saveFollowUp,'commercial/metric':commercial.metric,'packets':commercial.createPacket};
+        const commercialKind=route.match(/^commercial\/(template|quantity|lookahead|handover|comparison|followup|rollout)$/);
+        if(req.method==='POST'&&commercialKind){send(commercial.save(commercialKind[1],await body(req)),201);return;}
+        if(req.method==='POST'&&postRoutes[route]){send(await postRoutes[route](await body(req,route==='field/capture'?22*1024*1024:65536)),201);return;}
+        fail(404,'Project operation unavailable. External submission remains disabled.');
+      }
       const v2=path.match(/^\/api\/v2\/([^/]+)\/(.+)$/);
       if(v2) {
         requireSession();

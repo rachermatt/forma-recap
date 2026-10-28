@@ -56,3 +56,9 @@ test('linked records retain their own project, scope and model boundaries', () =
   assert.equal(validateReviewRoute({ page: 'field', section: 'photos', workspace: 'local' }, unconfigured), null);
   assert.ok(validateReviewRoute({ page: 'field', section: 'findings', workspace: 'local', element_id: 'DUCT-01' }, unconfigured));
 });
+
+
+test('broader decision and direct assignment routes preserve stable item and task identity without ambiguous parameters', () => {
+  for(const page of ['operations','assignments','research'] as const){const route={...DEFAULT_REVIEW_ROUTE,page,workspace:'local' as const,item_id:'item-drawing-A',assignment_id:'assignment-12'};const parsed=parseReviewHash(serializeReviewRoute(route));assert.equal(parsed.ok,true);if(parsed.ok)assert.deepEqual(parsed.route,route);}
+  assert.equal(parseReviewHash('#/field-assignments?workspace=local&assignment=a&assignment=b').ok,false);
+});
