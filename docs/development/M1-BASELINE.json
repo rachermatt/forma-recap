@@ -1,0 +1,189 @@
+{
+  "schema_version": "forma-recap.m1-baseline/1",
+  "captured_date": "2026-10-27",
+  "source_commit": "ee463ce",
+  "population": {
+    "mode": "fixture",
+    "source": "Checked-in validated synthetic demo bundle only; no private database, real photograph, human pilot or live APS dataset was read.",
+    "project_id": "fixture-project",
+    "scope_id": "fixture-scope",
+    "scope_revision": 1,
+    "model_version_id": "fixture-model-v7",
+    "eligible_elements": [
+      "DUCT-01",
+      "DUCT-02",
+      "DUCT-03"
+    ],
+    "fixed_coverage_policy": {
+      "as_of_date": "2026-10-19",
+      "freshness_days": 7
+    }
+  },
+  "source_seed_sha256": "d2f5d00ffe731e8a8fc3e6980aa7bd91cc597cd2f18712d1ee82d632b2f310af",
+  "storage_row_counts": {
+    "legacy": {
+      "media": 3,
+      "captures": 2,
+      "placement_events": 5,
+      "assessment_revisions": 3,
+      "exports": 2
+    },
+    "review": {
+      "review_metadata": 1,
+      "review_configuration": 0,
+      "review_captures": 1,
+      "review_media": 1,
+      "review_findings": 4,
+      "review_task_events": 3,
+      "reconciliation_revisions": 5,
+      "local_draft_revisions": 2,
+      "review_exports": 2
+    }
+  },
+  "counts": {
+    "projects": 1,
+    "trade_packages": 1,
+    "eligible_elements": 3,
+    "captures": 3,
+    "capture_precision": {
+      "unknown": 0,
+      "date": 1,
+      "timestamp": 2
+    },
+    "captures_with_saved_element_findings": 2,
+    "distinct_reviewed_elements": 2,
+    "current_capture_element_findings": 3,
+    "element_finding_revisions": 4,
+    "finding_corrections": 1,
+    "current_element_states": {
+      "not_observed": 0,
+      "observed_installed": 2,
+      "needs_review": 1
+    },
+    "unassessed_elements_across_all_captures": 1,
+    "historical_scope_current_assessments": 2,
+    "historical_scope_revisions": 3,
+    "recapture_tasks": 1,
+    "recapture_events": 3,
+    "capture_request_states": {
+      "completed": 1
+    },
+    "reassessment_states": {
+      "reassessed": 1
+    },
+    "requests_with_more_than_one_supplied_event": 0,
+    "current_reconciliation_rows": 5,
+    "reconciliation_categories": {
+      "trade_reported": 1,
+      "imagery_supported": 1,
+      "unresolved": 1,
+      "inspection": 1,
+      "approved": 1
+    },
+    "known_manual_quantities": 2,
+    "unknown_manual_quantities": 3,
+    "local_drafts": 1,
+    "draft_revisions": 2,
+    "workflow_packets": 2,
+    "historical_scope_packets": 2
+  },
+  "coverage_at_fixed_policy": {
+    "usable": 1,
+    "unresolved": 0,
+    "outdated": 1,
+    "no_evidence": 1,
+    "date_unknown": 0
+  },
+  "manual_comparison_example": {
+    "reported_quantity": 12,
+    "supported_quantity": 9,
+    "unit": "m",
+    "difference": 3,
+    "basis": "Authored synthetic manual centerline values for DUCT-01, same scope/version/period/method/comparison key; not measured from images.",
+    "period_start": "2026-10-01",
+    "period_end": "2026-10-19",
+    "denominator": null,
+    "completion_percent": null
+  },
+  "unavailable_metrics": {
+    "active_review_effort": null,
+    "request_to_suitable_evidence_pilot_time": null,
+    "human_reassessment_pilot_time": null,
+    "follow_up_preparation_effort": null,
+    "comparison_basis_failure_rate": null,
+    "independent_reviewer_agreement": null,
+    "representative_photograph_accuracy": null,
+    "recognition_accuracy": null,
+    "ai_correction_rate": null,
+    "external_publication_success_rate": null
+  },
+  "unavailable_reason": "No authorized human pilot population or active start/stop/attempt instrumentation; no independent reference labels, AI service, publication or offline-sync implementation. Synthetic timestamps are audit events, not worker-effort or productivity observations.",
+  "packet_integrity_baseline": [
+    {
+      "id": "packet-0a352aff-d4f2-4f1b-bca3-a9614a69f617",
+      "schema_version": "0.1.0",
+      "snapshot_sha256": "518e5d43a27a365877e13ff2d877e09af105b13c5846812cd332195fd4c0f4fa",
+      "manifest_file": "packets/packet-0a352aff-d4f2-4f1b-bca3-a9614a69f617.manifest.json",
+      "manifest_sha256": "f0092063da1212fd1fbd280d444c6e90299012d606636566d51a169e6100a333",
+      "report_file": "packets/packet-0a352aff-d4f2-4f1b-bca3-a9614a69f617.report.html",
+      "report_sha256": "099feebab68b85e9600236c44527f4c38e3e422d1a89cc900f1df6b242634493",
+      "summary_sha256": "f43c08f193dde3fe1e13fc777f407bbbcd00274e36e5ba6358342f7c4e635039"
+    },
+    {
+      "id": "packet-61457ca6-39f2-4a97-a8c7-057d027315c6",
+      "schema_version": "0.1.0",
+      "snapshot_sha256": "518e5d43a27a365877e13ff2d877e09af105b13c5846812cd332195fd4c0f4fa",
+      "manifest_file": "packets/packet-61457ca6-39f2-4a97-a8c7-057d027315c6.manifest.json",
+      "manifest_sha256": "bf56e40e61ecb6a81cf5c82fb821ad8923c6214d82336f217c101b314ea1a8f3",
+      "report_file": "packets/packet-61457ca6-39f2-4a97-a8c7-057d027315c6.report.html",
+      "report_sha256": "32ef5d2a4978c68da8eb9584cf90458c60647b94dab6d0ccd3cf2fbf4b58961c",
+      "summary_sha256": "904e5b1dc3d6e87f90342c50a5cbb0129314bc3045aaaab59400b60c76b51a20"
+    },
+    {
+      "id": "packet-425f85fd-8739-4abe-a90f-2ac0943491d8",
+      "schema_version": "0.2.0",
+      "snapshot_sha256": "2eb4d3106a4fa21d64432fcb46b66393af4ded56e137e47dc1c3c13d87d48138",
+      "manifest_file": "packets/packet-425f85fd-8739-4abe-a90f-2ac0943491d8.manifest.json",
+      "manifest_sha256": "cd4178574164edc0233046f893ffabb97893e90a09ba04bd7873c677e86c44b0",
+      "report_file": "packets/packet-425f85fd-8739-4abe-a90f-2ac0943491d8.report.html",
+      "report_sha256": "c6be00357e572065c575d855c7c04d267648fa6b39063a79fddc77e84504ba5d",
+      "summary_sha256": "d0de612a5f2dc73449587eb26559a5cbfa33639ec42dff9d46bbe58177b5ffb0"
+    },
+    {
+      "id": "packet-9d0865e3-85bf-459b-a204-2d19773b341a",
+      "schema_version": "0.2.0",
+      "snapshot_sha256": "e3f1ec30814e5ff0b81e14100f396d44d8cb0add9491bb8584ce6c70a8450f22",
+      "manifest_file": "packets/packet-9d0865e3-85bf-459b-a204-2d19773b341a.manifest.json",
+      "manifest_sha256": "872c00647daf4711d655fe39206f3e2bbdf794de13dcc28ab57beb67b508a8f2",
+      "report_file": "packets/packet-9d0865e3-85bf-459b-a204-2d19773b341a.report.html",
+      "report_sha256": "e6a5c6b983c5675a726fa47393dbeb98249da2101610d9d629823a84868545ee",
+      "summary_sha256": "0061e3e6344cccd55f80d0b293f23034b6263fcc55d2a29a5c891136bcad5687"
+    }
+  ],
+  "original_media_hashes": [
+    {
+      "id": "fixture-plan",
+      "sha256": "b654f972a7bfb2ab7beb6e44ea3414cea4f9a564ef315a543f384cbc539b46d0",
+      "bytes": 1466,
+      "kind": "synthetic_svg"
+    },
+    {
+      "id": "fixture-capture-01",
+      "sha256": "ffa399e8aea72b4e349e7173031783447ccf660f2ce3d2b65f119a4f28fd6948",
+      "bytes": 3022,
+      "kind": "synthetic_svg"
+    },
+    {
+      "id": "fixture-capture-02",
+      "sha256": "f2ab815a5935b7e2e90956d932c9797e3e4e3a8e13db2a212a03e718a74656c8",
+      "bytes": 3187,
+      "kind": "synthetic_svg"
+    },
+    {
+      "id": "photo-6026f353-e121-4a89-9896-d9e6c51e5a49",
+      "sha256": "47030eb7dd374cc09c5312ae64b8dfe1a323b928160a086c242c1ec796470ba0",
+      "bytes": 96047,
+      "kind": "synthetic_png"
+    }
+  ]
+}

@@ -1,0 +1,264 @@
+{
+  "schema_version": "0.3.0",
+  "verified_at": "2026-10-28T02:16:26.648Z",
+  "data_mode": "synthetic",
+  "records": {
+    "schema_version": "0.3.0",
+    "label": "Synthetic broader-workflow demonstration",
+    "item_id": "item-afd53753-976d-4cf9-b74f-daeed28a4c7b",
+    "gap_revision_id": "scope-revision-32b276b2-550f-4c59-8bf8-1015ef4b768f",
+    "followup_revision_id": "scope-revision-84243a00-8973-484c-b3b2-d83ddcafddfe",
+    "correction_revision_id": "scope-revision-f2494f66-277c-4301-8642-88d922f5bbdf",
+    "assignment_id": "assignment-3f258969-f52c-46c7-9bf3-c979d63cc91f",
+    "receipt_capture_id": "photo-3060301c-c666-42ef-b4f6-c87b98aa00da",
+    "idempotent_retry_same_capture": true,
+    "template_id": "template-709e8da3-61f3-48bd-82da-f000c339717f",
+    "draft_id": "followup-f51e6a3b-de8b-46ea-857b-7efab4541031",
+    "packet_id": "review-packet-c05b2367-3946-4765-b9ab-3e4b7b541030",
+    "successor_packet_id": "review-packet-a9147981-0f01-4a95-954c-c0196e6bf53f",
+    "experiment_id": "experiment-c281e1cb-769c-4e2b-872e-308723b93091",
+    "evaluation_id": "evaluation-5e68f5b0-a99c-4c43-b3f6-ba3efe40878e",
+    "external_records_created": 0,
+    "recognition_model_connected": false
+  },
+  "checks": {
+    "original_packets_unchanged": [
+      {
+        "id": "packet-0a352aff-d4f2-4f1b-bca3-a9614a69f617",
+        "sha256": "099feebab68b85e9600236c44527f4c38e3e422d1a89cc900f1df6b242634493"
+      },
+      {
+        "id": "packet-61457ca6-39f2-4a97-a8c7-057d027315c6",
+        "sha256": "32ef5d2a4978c68da8eb9584cf90458c60647b94dab6d0ccd3cf2fbf4b58961c"
+      },
+      {
+        "id": "packet-425f85fd-8739-4abe-a90f-2ac0943491d8",
+        "sha256": "c6be00357e572065c575d855c7c04d267648fa6b39063a79fddc77e84504ba5d"
+      },
+      {
+        "id": "packet-9d0865e3-85bf-459b-a204-2d19773b341a",
+        "sha256": "e6a5c6b983c5675a726fa47393dbeb98249da2101610d9d629823a84868545ee"
+      }
+    ],
+    "HTML_manifest_same_snapshot": true,
+    "legacy_findings": 3,
+    "legacy_finding_revisions": 4,
+    "custom_scope_revisions": 3,
+    "latest_quantity_requires_re_review": true,
+    "external_records_created": 0,
+    "recognition_model_connected": false,
+    "automated_tests": {
+      "passed": 152,
+      "failed": 0,
+      "skipped": 0
+    },
+    "production_build": "passed",
+    "browser_ui": [
+      "new_custom_scope_saved",
+      "saved_annotations_loaded",
+      "exact_item_capture_drafts_isolated",
+      "discard_restores_saved_values",
+      "IndexedDB_original_retained_across_reload",
+      "hash_and_assignment_receipt_required_for_synced",
+      "supply_does_not_reassess",
+      "390px_no_horizontal_overflow",
+      "fixed_HTML_report_and_separate_annotations_visually_inspected",
+      "direct_assignment_link_focuses_saved_task",
+      "new_custom_findings_visible_in_review_log",
+      "missing_view_asset_recoverable_alert_then_reload_restores_assignment"
+    ]
+  },
+  "packets": [
+    {
+      "id": "review-packet-c05b2367-3946-4765-b9ab-3e4b7b541030",
+      "report_sha256": "3dd61acd1c5c0b75ae6c78a8e06dce0c4d4a998de0e5c553a08f8f672ae7108b",
+      "snapshot_sha256": "ebcf616cff42baf64e7c076c49aa1d25a1a3d28065c91b06682324e2930906a2",
+      "finding_revisions": 2,
+      "exceptions": [
+        "quantity_difference",
+        "local_followup",
+        "lookahead_review"
+      ],
+      "quantity_calculations": [
+        {
+          "id": "template-revision-74fc38a8-3513-4489-9f6b-936da186095d:2026-10-01:2026-10-27",
+          "item_ids": [
+            "item-afd53753-976d-4cf9-b74f-daeed28a4c7b"
+          ],
+          "template_id": "template-709e8da3-61f3-48bd-82da-f000c339717f",
+          "template_revision_id": "template-revision-74fc38a8-3513-4489-9f6b-936da186095d",
+          "period_start": "2026-10-01",
+          "period_end": "2026-10-27",
+          "period_type": "cumulative",
+          "stage": "installed",
+          "unit": "m",
+          "reported": 12,
+          "supported": 9,
+          "delta": 3,
+          "comparable": true,
+          "reason": "Difference between explicitly sourced manual records; not a payable quantity.",
+          "correction_review_required": false,
+          "correction_revision_ids": [],
+          "correction_policy": "Conservative item-level review prompt: a later correction is not a measured quantity change. Saved quantities remain unchanged until an explicit human revision.",
+          "percentage": 45,
+          "denominator": 20,
+          "percentage_basis": "Cumulative installed manual quantity / template revision 1, denominator 20 m; neither inspection acceptance nor payment approval is inferred.",
+          "record_ids": [
+            "quantity-20e3b927-c247-4d34-8934-10547ff71901",
+            "quantity-c8709abe-a6a9-4c7f-906e-cb2116e682a1",
+            "quantity-f6296eab-91dc-4413-b9ae-2b1bce29fd6c",
+            "quantity-08687414-3260-462a-a53a-4aa1e944f31a"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "review-packet-a9147981-0f01-4a95-954c-c0196e6bf53f",
+      "report_sha256": "e7b259e4d38f9d38d54ce73218f73ec7136aa711954dc11d4e2f6574410f099a",
+      "snapshot_sha256": "f6216abbc4b2eec49d2c45a509fb23309e6a1e499eff751a3d010696cb3515e2",
+      "finding_revisions": 3,
+      "exceptions": [
+        "unresolved_finding",
+        "awaiting_reassessment",
+        "quantity_basis_unresolved",
+        "local_followup",
+        "lookahead_review"
+      ],
+      "quantity_calculations": [
+        {
+          "id": "template-revision-74fc38a8-3513-4489-9f6b-936da186095d:2026-10-01:2026-10-27",
+          "item_ids": [
+            "item-afd53753-976d-4cf9-b74f-daeed28a4c7b"
+          ],
+          "template_id": "template-709e8da3-61f3-48bd-82da-f000c339717f",
+          "template_revision_id": "template-revision-74fc38a8-3513-4489-9f6b-936da186095d",
+          "period_start": "2026-10-01",
+          "period_end": "2026-10-27",
+          "period_type": "cumulative",
+          "stage": "installed",
+          "unit": "m",
+          "reported": 12,
+          "supported": 9,
+          "delta": null,
+          "comparable": false,
+          "reason": "A later finding correction affects this scope. Re-review and explicitly revise the imagery-supported quantity before comparing sources or calculating completion.",
+          "correction_review_required": true,
+          "correction_revision_ids": [
+            "scope-revision-f2494f66-277c-4301-8642-88d922f5bbdf"
+          ],
+          "correction_policy": "Conservative item-level review prompt: a later correction is not a measured quantity change. Saved quantities remain unchanged until an explicit human revision.",
+          "percentage": null,
+          "denominator": 20,
+          "percentage_basis": "A later finding correction affects this scope. Re-review and explicitly revise the imagery-supported quantity before comparing sources or calculating completion.",
+          "record_ids": [
+            "quantity-20e3b927-c247-4d34-8934-10547ff71901",
+            "quantity-c8709abe-a6a9-4c7f-906e-cb2116e682a1",
+            "quantity-f6296eab-91dc-4413-b9ae-2b1bce29fd6c",
+            "quantity-08687414-3260-462a-a53a-4aa1e944f31a"
+          ]
+        }
+      ]
+    }
+  ],
+  "evaluations": [
+    {
+      "schema_version": "1.0.0",
+      "record_id": "evaluation-5e68f5b0-a99c-4c43-b3f6-ba3efe40878e",
+      "workspace": "fixture",
+      "project_id": "fixture-project",
+      "data_mode": "fixture",
+      "recorded_by": "fixture-reviewer",
+      "recorded_at": "2026-10-28T02:14:42.081Z",
+      "experiment_id": "experiment-c281e1cb-769c-4e2b-872e-308723b93091",
+      "run_id": "manual-protocol-smoke-001",
+      "protocol": {
+        "schema_version": "1.0.0",
+        "record_id": "experiment-c281e1cb-769c-4e2b-872e-308723b93091",
+        "workspace": "fixture",
+        "project_id": "fixture-project",
+        "data_mode": "fixture",
+        "recorded_by": "fixture-reviewer",
+        "recorded_at": "2026-10-28T02:14:41.716Z",
+        "name": "Duct/terminal protocol smoke test",
+        "intended_use": "Exercise abstention and held-out evaluation bookkeeping only, not validate construction accuracy.",
+        "permission_basis": "Server-owned synthetic illustrations; no customer or site photographs.",
+        "ground_truth_process": "Artificial illustration reference labels for a protocol test. No real-site reference population.",
+        "thresholds": {
+          "classification_accuracy": 0.9,
+          "identity_accuracy": 0.95,
+          "stage_accuracy": 0.9,
+          "measurement_relative_error": 0.05
+        },
+        "minimum_held_out": 20,
+        "scope": "duct_terminal",
+        "frozen_protocol": true,
+        "ai_service_connected": false,
+        "production_enabled": false
+      },
+      "case_ids": [
+        "case-f37ea7fe-68e3-498c-a77b-8d4f381b9777"
+      ],
+      "proposal_ids": [
+        "proposal-705b23df-f25b-4503-88b9-c541c9ab09af"
+      ],
+      "held_out_cases": 1,
+      "proposed_cases": 1,
+      "abstained_cases": 1,
+      "metrics": {
+        "classification": {
+          "correct": 0,
+          "eligible": 1,
+          "value": 0,
+          "denominator": "All held-out cases with known reference label; absent/abstained proposals do not disappear."
+        },
+        "identity": {
+          "correct": 0,
+          "eligible": 1,
+          "value": 0,
+          "denominator": "All held-out cases with known reference label; absent/abstained proposals do not disappear."
+        },
+        "stage": {
+          "correct": 0,
+          "eligible": 1,
+          "value": 0,
+          "denominator": "All held-out cases with known reference label; absent/abstained proposals do not disappear."
+        },
+        "visibility": {
+          "correct": 0,
+          "eligible": 1,
+          "value": 0,
+          "denominator": "All held-out cases with known reference label; absent/abstained proposals do not disappear."
+        },
+        "measurement": {
+          "eligible": 0,
+          "evaluated": 0,
+          "unsupported": 0,
+          "mean_absolute_error": null,
+          "mean_relative_error": null,
+          "note": "Absolute errors use different units and are not aggregated; relative errors include positive calibrated reference quantities only. No installed quantities are summed across captures."
+        },
+        "alignment": {
+          "verified_project_registration": false,
+          "value": null,
+          "reason": "No independent project-registration truth or algorithm is connected."
+        }
+      },
+      "gates": {
+        "population": false,
+        "classification": false,
+        "identity": false,
+        "stage": false,
+        "measurement": false
+      },
+      "status": "insufficient_evaluation_population",
+      "synthetic_only": true,
+      "ai_accuracy_claim_supported": false,
+      "production_enabled": false,
+      "limitations": [
+        "Human-entered/imported experimental proposals only; no recognition model is connected.",
+        "Synthetic data and a passing protocol check do not demonstrate construction recognition accuracy.",
+        "Reviewer decisions remain independent of production findings, acceptance, payment and external records."
+      ]
+    }
+  ]
+}

@@ -4,6 +4,8 @@ A local evidence-review prototype for comparing dated site captures against a de
 
 The interface follows the Forma Build visual references, with a white product header, light tool navigation and blue actions. The header uses the supplied **AUTODESK Forma ReCap** PNG unchanged, with proportional CSS display scaling. The previous SVG compositions remain historical alternates. See [appearance notes](docs/APPEARANCE.md) and [logo assets](docs/BRAND-ASSETS.md).
 
+Version **0.3** adds a weekly decision queue, BIM-optional stable scope and dossiers, explicit reference mappings, planned field assignments, a persistent browser capture queue, versioned measurement templates, local follow-through tracking, purpose-based packets, lookahead/handover checklists and a bounded research evaluation workbench. [Delivery status, walkthrough and remaining dependencies](docs/development/BROADER-STATUS.md). These are local human-reviewed workflows; shared mobile deployment, live Autodesk publication and actual recognition accuracy remain unverified.
+
 ## Run
 
 Requires Node.js **24.19 or later**. Get the source:
@@ -42,9 +44,20 @@ Open **http://localhost:8080/**. If another local instance is running, use `PORT
 
 See [demo setup and seed validation](docs/DEMO.md) and the [saved acceptance walkthrough](docs/ACCEPTANCE-WALKTHROUGH.md). To use a different new directory, pass the same `--data-dir` to both commands; the original working application still runs with `npm start`.
 
+To create the additional saved 0.3 example in a **new empty directory**:
+
+```sh
+npm run demo:broader -- --data-dir data/broader-demo
+PORT=8083 npm run demo -- --data-dir data/broader-demo
+```
+
+Open **http://localhost:8083/**. Setup first restores the original seed, then records a synthetic drawing-only scope journey, planned capture, idempotent receipt, independent findings, manual quantities, local RFI, first packet, later correction and successor packet. It refuses an existing directory and never loads `.env`. It stores record IDs in `broader-demo-records.json` in that isolated directory. The original four packets remain unchanged. [Example weekly report](docs/development/examples/weekly-review.html) and [corrected successor](docs/development/examples/concealment-successor.html) are fixed copies from the verified example.
+
 ## Try the element workflow
 
-Follow the [current acceptance walkthrough](docs/ACCEPTANCE-WALKTHROUGH.md) for the saved end-to-end example, record references, verification evidence and remaining dependencies. Evidence workspace comes before Element review in both navigation menus.
+Follow the [current acceptance walkthrough](docs/ACCEPTANCE-WALKTHROUGH.md) for the saved end-to-end example, record references, verification evidence and remaining dependencies. Evidence workspace comes before Element review in the primary sidebar; the duplicate primary tab bar has been removed.
+
+The October 27 [M1 usability delivery](docs/development/M1-STATUS.md) adds a distinct last-saved finding, explicit unsaved-change decisions, pending versus applied reporting dates, and context-preserving links. Finding drafts remain in memory while navigating this browser session; saving persists a revision, while a full reload can discard unsaved work after the browser warning. In Reconciliation, edit the dates and choose **Apply period**; **Results use** identifies the active filter. **All recorded periods** clears it. Leaving that section or reloading starts with all periods. Evidence packets opens directly from its workbench action or the sidebar.
 
 1. Open **Element review** and select **Synthetic demo**. Choose the October 8 capture and DUCT-01. Record an observed installation, a rationale and a rectangle marking the relevant image area. Select DUCT-03 in that same capture and save **Needs review**, with an occlusion reason. These are independent findings; older scope assessments remain separate.
 2. In **Recapture & coverage**, create a task from the unresolved finding, assigning a person, due date and required viewpoint. Mark before-concealment evidence where relevant. In **Photographs & scope**, download and import the bundled synthetic recapture PNG with an explicit later demonstration capture date, then link it to the task. Supplying evidence completes the capture request and leaves human reassessment pending; it creates no installation, acceptance or approval decision. **Reassess linked evidence** saves a subsequent finding with exact links to the original task, finding, capture and model version. The new finding may still be **Needs review**. Earlier findings and task events remain preserved.
