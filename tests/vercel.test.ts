@@ -74,6 +74,24 @@ test('public demo rejects edits before reading bodies, private/local workspaces 
   const after=await request('/api/v2/fixture/bootstrap');assert.equal(after.json().finding_revisions.length,4);assert.equal(after.json().exports.length,2);
 });
 
+test('validated Vercel rewrites remove only the reserved wildcard query without changing routes or weakening filter validation',async t=>{
+  const {request}=await serving(t);
+  const route='/api/v3/fixture/bootstrap';
+  for(const originalPath of ['/api/index',route]){
+    const result=await request(`${originalPath}?__forma_route=${route}&path=v3%2Ffixture%2Fbootstrap&as_of_date=2026-10-29&freshness_days=7`);
+    assert.equal(result.status,200);assert.equal(result.json().workspace,'fixture');assert.equal(result.json().scope.policy.as_of_date,'2026-10-29');assert.equal(result.json().scope.policy.freshness_days,7);
+  }
+  const unknownFilter=await request(`/api/index?__forma_route=${route}&path=v3%2Ffixture%2Fbootstrap&foo=untrusted`);
+  assert.equal(unknownFilter.status,400);assert.match(unknownFilter.json().error,/Unsupported scope operation fields/);
+  assert.equal((await request(`${route}?path=v3%2Ffixture%2Fbootstrap`)).status,400,'An unmarked user query remains subject to ordinary strict validation.');
+  const spoofedPath=await request(`/api/index?__forma_route=${route}&path=v3%2Flocal%2Fbootstrap`);
+  assert.equal(spoofedPath.status,200);assert.equal(spoofedPath.json().workspace,'fixture','The wildcard query cannot override the validated route marker.');
+  assert.equal((await request(`${route}?__forma_route=/api/v3/local/bootstrap&path=v3%2Ffixture%2Fbootstrap`)).status,400,'The route marker must still match a preserved original pathname.');
+  assert.equal((await request('/api/index?__forma_route=/api/v3/local/bootstrap&path=v3%2Ffixture%2Fbootstrap')).status,409);
+  assert.equal((await request('/api/index?__forma_route=/auth/login&path=api%2Fbootstrap')).status,403);
+  assert.equal((await request('/api/index?__forma_route=/api/v3/fixture/scope/items&path=api%2Fbootstrap',{method:'POST',body:'not JSON'})).status,405);
+});
+
 test('public demo rejects foreign hosts, HTTP origins, cross-site requests and conflicting rewrite routing',async t=>{
   const {request}=await serving(t);
   for(const headers of [{Host:'attacker.example'},{Host:'localhost:8080'},{Origin:`http://${host}`},{Origin:`http://${legacyHost}`},{Origin:'https://attacker.example'},{'Sec-Fetch-Site':'cross-site'},{Host:'attacker.example','X-Forwarded-Host':host}] as Record<string,string>[])assert.equal((await request('/api/bootstrap',{headers})).status,403);

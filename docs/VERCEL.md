@@ -24,6 +24,8 @@ If a project-level override conflicts with repository configuration, inspect the
 
 After deploying, verify `/api/bootstrap`, `/api/v2/fixture/bootstrap`, one source-media route and a fixed packet report. Confirm the bootstrap identifies a public synthetic read-only deployment and that mutation, private workspace and authentication routes remain blocked.
 
+The weekly decision queue also needs `/api/v3/fixture/bootstrap`. Vercel can forward the named `:path*` rewrite capture as a `path` query parameter. The adapter consumes that reserved transport field after validating `__forma_route`; only the remaining application query reaches strict scope-filter validation. The route marker and original request pathname still have to agree, unknown application filters still fail, and `path` cannot redirect a request into a private workspace.
+
 ## Validation and future cloud editing
 
 The focused server tests cover anonymous public reads across independent instances, exact allowed HTTPS hosts/origins, rewritten routes and query preservation, disabled mutations/local workspaces/APS, original media and fixed packets. Existing localhost tests continue to cover sessions, CSRF and persistent review behavior. The production frontend is built with the hosted controls and disclosures.

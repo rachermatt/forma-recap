@@ -25,6 +25,9 @@ function routeRequest(req: IncomingMessage) {
     const route=markers[0];
     if ((url.pathname!=='/api/index' && url.pathname!==route) || !/^\/(?:api|auth)\/[a-zA-Z0-9_./%~-]+$/.test(route) || route.includes('//') || route.split('/').includes('..') || new URL(route,primaryOrigin).pathname!==route) throw Object.assign(new Error('Invalid internal demo route marker.'),{status:400});
     url.searchParams.delete('__forma_route');
+    // Vercel also forwards the named :path* capture as routing metadata.
+    // It must never become a domain filter or override the validated route.
+    url.searchParams.delete('path');
     return `${route}${url.searchParams.size?`?${url.searchParams}`:''}`;
   }
   return `${url.pathname}${url.search}`;
