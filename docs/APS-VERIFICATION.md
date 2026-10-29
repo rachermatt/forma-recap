@@ -1,6 +1,6 @@
-# Forma ReCap APS verification
+# Forma ReTrace APS verification
 
-Checked 2026-10-19. This document separates documented contracts, implementation tests, and live authorization. The original handoff remains source material; the current product name is **Forma ReCap**.
+Checked 2026-10-19. This document separates documented contracts, implementation tests, and live authorization. The original handoff remains source material; the current product name is **Forma ReTrace**.
 
 ## Implemented boundary
 

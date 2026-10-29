@@ -14,6 +14,6 @@ try {
   const config = loadConfig({APP_MODE:'fixture',DATA_DIR:dataDir,PORT:process.env.PORT || '8080',APS_CLIENT_ID:'',APS_CLIENT_SECRET:'',APS_HUB_ID:''});
   const app = createApp(config);
   app.server.once('error',error=>{console.error(`Demo could not start: ${error.message}. Use PORT=8081 npm run demo if 8080 is already occupied.`);app.close();process.exitCode=1;});
-  app.server.listen(config.port,'127.0.0.1',()=>console.log(`Forma ReCap · isolated synthetic demo · http://localhost:${config.port} · APS credentials disabled`));
+  app.server.listen(config.port,'127.0.0.1',()=>console.log(`Forma ReTrace · isolated synthetic demo · http://localhost:${config.port} · APS credentials disabled`));
   for (const signal of ['SIGINT','SIGTERM']) process.on(signal,()=>{app.close();process.exit(0);});
 } catch (error) { console.error((error as Error).message);process.exitCode=1; }

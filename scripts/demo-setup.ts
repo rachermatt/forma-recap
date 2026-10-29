@@ -198,6 +198,6 @@ export function demoDirectory(args: string[]) {
   return resolve(args[1]);
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  try { const result = setupDemo({targetDir:demoDirectory(process.argv.slice(2))}); console.log(`Synthetic Forma ReCap demo prepared at ${result.targetDir}. Run npm run demo (or use the same --data-dir).`); }
+  try { const result = setupDemo({targetDir:demoDirectory(process.argv.slice(2))}); console.log(`Synthetic Forma ReTrace demo prepared at ${result.targetDir}. Run npm run demo (or use the same --data-dir).`); }
   catch (error) { console.error((error as Error).message); process.exitCode=1; }
 }

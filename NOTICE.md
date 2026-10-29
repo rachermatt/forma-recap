@@ -1,8 +1,8 @@
 # Content and provenance
 
-Forma ReCap is a local prototype. This repository does not represent an Autodesk product release or establish Autodesk endorsement.
+Forma ReTrace is a local prototype. This repository does not represent an Autodesk product release or establish Autodesk endorsement.
 
-The active `public/brand/autodesk-forma-recap.png` was supplied by the project owner and is retained unchanged. Historical alternate logo files and Autodesk product names are reference branding. The repository does not grant rights to Autodesk names, logos or other third-party marks.
+The active `public/brand/autodesk-forma-retrace.png` is the revised logo requested by the project owner. Its earlier source `public/brand/autodesk-forma-recap.png` remains preserved unchanged. Historical alternate logo files and Autodesk product names are reference branding. The repository does not grant rights to Autodesk names, logos or other third-party marks.
 
 The corridor illustrations, reference plan and labeled synthetic recapture in `server/media/` are prototype fixtures. Their display derivatives preserve separate source and display hashes. The versioned demo bundle contains only the synthetic project and its local demonstration decisions, not customer site photographs or live APS project data.
 

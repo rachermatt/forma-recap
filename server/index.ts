@@ -136,7 +136,7 @@ export function createApp(config:Config, deps: {store?:any; aps?:any; deployment
       const jar=publicDemo?{}:cookies(req);
       let local=localSessions.get(jar.recap_local || '');
       if(local && local.expires<Date.now()) { localSessions.delete(jar.recap_local); local=undefined; }
-      const requireSession=()=>{if(!publicDemo && !local) fail(401,'Open Forma ReCap to start a local review session.');};
+      const requireSession=()=>{if(!publicDemo && !local) fail(401,'Open Forma ReTrace to start a local review session.');};
       if(!['GET','HEAD'].includes(req.method || 'GET')) {
         requireSession();
         if(!equal(String(req.headers['x-csrf-token'] || ''),local!.csrf)) fail(403,'Invalid request token. Reload the app and retry.');
@@ -173,7 +173,7 @@ export function createApp(config:Config, deps: {store?:any; aps?:any; deployment
         if(route==='configure'&&req.method==='POST'){send(review.configure(await body(req)),201);return;}
         if(route==='scope/bootstrap'&&req.method==='GET'){send(scopes.bootstrap(filters));return;}
         const dossier=route.match(/^dossier\/(.+)$/);if(dossier&&req.method==='GET'){const id=decodeURIComponent(dossier[1]);const d=scopes.dossier(id);send({...d,field:field.bootstrap().assignments.filter((a:any)=>a.item_id===id),commercial:commercial.bootstrap().records.filter((r:any)=>r.item_ids?.includes(id)),asset_proposals:research.bootstrap().asset_proposals.filter((a:any)=>a.item_id===id)});return;}
-        const packet=route.match(/^packets\/([^/]+)\/(manifest|report)$/);if(packet&&req.method==='GET'){const p=commercial.getPacket(packet[1]);res.setHeader('Content-Disposition',`${url.searchParams.get('inline')==='1'?'inline':'attachment'}; filename="forma-recap-${packet[1]}.${packet[2]==='manifest'?'json':'html'}"`);if(packet[2]==='manifest')send(p.manifest);else{res.setHeader('Content-Security-Policy',"sandbox; default-src 'none'; img-src data:; style-src 'unsafe-inline'");res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});res.end(p.html);}return;}
+        const packet=route.match(/^packets\/([^/]+)\/(manifest|report)$/);if(packet&&req.method==='GET'){const p=commercial.getPacket(packet[1]);res.setHeader('Content-Disposition',`${url.searchParams.get('inline')==='1'?'inline':'attachment'}; filename="forma-retrace-${packet[1]}.${packet[2]==='manifest'?'json':'html'}"`);if(packet[2]==='manifest')send(p.manifest);else{res.setHeader('Content-Security-Policy',"sandbox; default-src 'none'; img-src data:; style-src 'unsafe-inline'");res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});res.end(p.html);}return;}
         const getRoutes:Record<string,()=>any>={'field/bootstrap':field.bootstrap,'field/readiness':field.readiness,'research/bootstrap':research.bootstrap,'commercial/bootstrap':commercial.bootstrap};
         if(req.method==='GET'&&getRoutes[route]){send(getRoutes[route]());return;}
         const postRoutes:Record<string,(input:any)=>any>={'scope/items':scopes.saveItem,'scope/findings':scopes.saveFinding,'scope/mappings':scopes.saveMapping,'scope/conflicts':scopes.saveConflict,'field/requirements':field.saveRequirement,'field/assignments':field.saveAssignment,'field/events':field.recordEvent,'field/capture':field.receiveCapture,'field/release':field.saveRelease,'research/capability':research.saveCapability,'research/asset-proposal':research.saveAssetProposal,'research/experiment':research.saveExperiment,'research/case':research.saveCase,'research/proposal':research.saveProposal,'research/decision':research.saveDecision,'research/evaluate':research.evaluate,'research/follow-up':research.saveFollowUp,'commercial/metric':commercial.metric,'packets':commercial.createPacket};
@@ -220,7 +220,7 @@ export function createApp(config:Config, deps: {store?:any; aps?:any; deployment
         if((match=route.match(/^exports\/([^/]+)\/(manifest|report)$/)) && req.method==='GET') {
           const packet=review.getExport(decodeURIComponent(match[1]));
           const disposition=match[2]==='report' && url.searchParams.get('inline')==='1'?'inline':'attachment';
-          res.setHeader('Content-Disposition',`${disposition}; filename="forma-recap-${v2[1]}-${match[1]}.${match[2]==='manifest'?'json':'html'}"`);
+          res.setHeader('Content-Disposition',`${disposition}; filename="forma-retrace-${v2[1]}-${match[1]}.${match[2]==='manifest'?'json':'html'}"`);
           if(match[2]==='manifest') send(packet.manifest);
           else {res.setHeader('Content-Security-Policy',"sandbox; default-src 'none'; img-src data:; style-src 'unsafe-inline'");res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});res.end(packet.html);}return;
         }
@@ -243,7 +243,7 @@ export function createApp(config:Config, deps: {store?:any; aps?:any; deployment
         if(path==='/api/exports' && req.method==='POST') {const input=await body(req);if(Object.keys(input).length)fail(400,'Export uses the current reviewed snapshot.');send(store.createExport(),201);return;}
         if((m=path.match(/^\/api\/exports\/([^/]+)\/(manifest|report)$/)) && req.method==='GET') {
           const packet=store.getExport(decodeURIComponent(m[1]));
-          res.setHeader('Content-Disposition',`attachment; filename="forma-recap-${m[1]}.${m[2]==='manifest'?'json':'html'}"`);
+          res.setHeader('Content-Disposition',`attachment; filename="forma-retrace-${m[1]}.${m[2]==='manifest'?'json':'html'}"`);
           if(m[2]==='manifest') send(packet.manifest);
           else {res.setHeader('Content-Security-Policy',"sandbox; default-src 'none'; img-src data:; style-src 'unsafe-inline'");res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});res.end(packet.html);}return;
         }
@@ -272,6 +272,6 @@ export function createApp(config:Config, deps: {store?:any; aps?:any; deployment
 if(process.argv[1] && resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
   const envFile=resolve(ROOT,'.env'); if(existsSync(envFile)) process.loadEnvFile(envFile);
   const config=loadConfig();const app=createApp(config);
-  app.server.listen(config.port,'127.0.0.1',()=>console.log(`Forma ReCap · ${config.mode} mode · http://localhost:${config.port}`));
+  app.server.listen(config.port,'127.0.0.1',()=>console.log(`Forma ReTrace · ${config.mode} mode · http://localhost:${config.port}`));
   for(const signal of ['SIGINT','SIGTERM']) process.on(signal,()=>{app.close();process.exit(0);});
 }

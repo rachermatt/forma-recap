@@ -62,6 +62,6 @@ The existing source code supports append-only assessment revisions and snapshots
 | Progress/pay-app conclusions from imagery | Separate imagery observations, reported progress, acceptance, authorized approved quantities, and payment/certification references. |
 | Broad ReCap/Forma/Tandem roadmap | One project, one floor, one trade package, multiple capture dates. Tandem investigated separately. |
 | Handoff instructions propose later reviewed Issue writes | Current increment creates local drafts only and retains disabled external submission. No external records are authorized by draft creation. |
-| Documents use Forma Lens terminology | Product name remains Forma ReCap. Original source documents remain unchanged. |
+| Documents use Forma Lens terminology | Current product name is Forma ReTrace. Original source documents and their filenames remain unchanged. |
 
 No supplied material establishes measured quantity accuracy, site truth, verified 3D registration, model-viewing entitlement, capture API access, external write permissions, inspection acceptance, contractual completion, or payment approval.

@@ -1,4 +1,4 @@
-# Forma ReCap validation record
+# Forma ReTrace validation record
 
 Increment 0.2 is documented in [INCREMENT-VALIDATION.md](INCREMENT-VALIDATION.md): 67 passing checks, new element/photo/task/reconciliation/draft workflows and browser/export inspection. The record below preserves the earlier 0.1 validation.
 

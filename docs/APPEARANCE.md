@@ -1,5 +1,7 @@
 # Forma Build appearance refresh
 
+Current product name: **Forma ReTrace**. The October 29, 2026 rename applies the revised PNG and current interface text; the dated sections below retain the original design history.
+
 Requested October 19, 2026: align Forma ReCap with Forma Build and combine the supplied Autodesk, Forma and ReCap brand references into an `AUTODESK Forma ReCap` lockup.
 
 ## Reference
@@ -14,7 +16,7 @@ The screenshots show a white application header with black branding, light tool 
 
 ## Applied design
 
-- White global product header with the custom Autodesk/Forma/ReCap vector lockup, project context, and explicit data-mode label.
+- White global product header with the Autodesk Forma ReTrace PNG, project context, and explicit data-mode label. The original refresh began with a vector lockup, preserved as a historical alternate.
 - Light side navigation with outline icons, blue active text and a blue selection rule.
 - Neutral white/gray surfaces, blue buttons and links, flat panels, compact form controls and table rows.
 - Underlined page navigation for the existing comparison, review log, evidence packets and APS views.
@@ -25,7 +27,7 @@ The source stylesheet was replaced with organized component rules. No API contra
 
 ## Logo assets
 
-The header now uses [the supplied PNG](../public/brand/autodesk-forma-recap.png), copied byte-for-byte from `Autodesk Forma ReCap.png` (3440 × 1042). CSS scales its display proportionally without cropping, recoloring, regeneration, or image edits. This replaces the vector lockup described in the original refresh above; the previous [black](../public/brand/forma-recap-dark.svg) and [white](../public/brand/forma-recap-light.svg) SVGs remain historical alternates. The [favicon](../public/brand/autodesk-mark.svg) and original references remain available. See [brand provenance](BRAND-ASSETS.md).
+The header now uses [the revised Forma ReTrace PNG](../public/brand/autodesk-forma-retrace.png) (2242 × 701), copied unchanged from the selected logo edit. CSS scales its display proportionally without cropping, recoloring, or changing the selected file. The earlier [owner-supplied PNG](../public/brand/autodesk-forma-recap.png) (3440 × 1042), [black](../public/brand/forma-recap-dark.svg) and [white](../public/brand/forma-recap-light.svg) SVGs remain historical assets. The [favicon](../public/brand/autodesk-mark.svg) and original references remain available. See [brand provenance](BRAND-ASSETS.md) and [compatibility notes](REBRANDING.md).
 
 ## Validation
 

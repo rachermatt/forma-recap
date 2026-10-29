@@ -120,6 +120,7 @@ test('follow-up and comparison source failures stay visible without claiming reg
 
 test('packet HTML and manifest share one escaped immutable snapshot with exact successor revision changes', t => {
   const f = setup(t); const original = f.finding('finding-rev1'); const first = f.api.createPacket(packet({ decision_summary: '</script><img src=x onerror=alert(1)>' })); const saved = f.api.getPacket(first.id);
+  assert.equal(saved.manifest.product, 'Forma ReTrace'); assert.match(saved.html, /<title>Forma ReTrace ·/);
   const script = saved.html.match(/<script type="application\/json" id="forma-recap-manifest">([\s\S]*?)<\/script>/)![1]; assert.deepEqual(JSON.parse(script), saved.manifest); assert.equal(saved.manifest.snapshot_sha256, digest(canonicalJson(saved.manifest.snapshot)));
   assert.ok(saved.html.includes('&lt;/script&gt;')); assert.ok(!script.includes('</script><img')); assert.ok(saved.html.includes('&lt;img src=x onerror=alert(1)&gt;'));
   const priorBytes = { html: saved.html, manifest: JSON.stringify(saved.manifest) };

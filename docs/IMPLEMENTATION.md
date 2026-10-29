@@ -1,8 +1,8 @@
-# Forma ReCap implementation agreement
+# Forma ReTrace implementation agreement
 
 Increment 0.2 extends this architecture through [NEXT-INCREMENT.md](NEXT-INCREMENT.md), adding separate element findings, original photograph storage, recapture, manual reconciliation and local drafts. The original 0.1 agreement remains below for compatibility.
 
-Build target: first persistent local fixture workflow (handoff Phase 0–1), plus server-managed OAuth and smallest read adapters where access permits. Product name is always Forma ReCap; original handoff is retained unchanged as source material.
+Build target: first persistent local fixture workflow (handoff Phase 0–1), plus server-managed OAuth and smallest read adapters where access permits. Product name is always Forma ReTrace; original handoff is retained unchanged as source material.
 
 Stack: Node 24.19+ native TypeScript execution and node:sqlite; React + TypeScript + Vite for the browser. One Node HTTP server on localhost:8080 serves the built browser app and JSON API. No deployment or live external writes. SQLite and secrets stay out of source control.
 

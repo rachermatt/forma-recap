@@ -1,8 +1,8 @@
-# Forma ReCap
+# Forma ReTrace
 
-A local evidence-review prototype for comparing dated site captures against a defined model scope. Version 0.2 adds individual element findings, recapture tasks, local photograph import, manual progress reconciliation and local Issue/RFI drafts, while preserving historical scope assessments, corrections and fixed packets. The original proposal is in [the handoff](docs/handoff/CODEX_START_HERE.md); the requested product name **Forma ReCap** takes precedence over its earlier working name.
+A local evidence-review prototype for comparing dated site captures against a defined model scope. Version 0.2 adds individual element findings, recapture tasks, local photograph import, manual progress reconciliation and local Issue/RFI drafts, while preserving historical scope assessments, corrections and fixed packets. The original proposal is in [the handoff](docs/handoff/CODEX_START_HERE.md); the requested product name **Forma ReTrace** takes precedence over its earlier working name.
 
-The interface follows the Forma Build visual references, with a white product header, light tool navigation and blue actions. The header uses the supplied **AUTODESK Forma ReCap** PNG unchanged, with proportional CSS display scaling. The previous SVG compositions remain historical alternates. See [appearance notes](docs/APPEARANCE.md) and [logo assets](docs/BRAND-ASSETS.md).
+The interface follows the Forma Build visual references, with a white product header, light tool navigation and blue actions. The header uses the revised **AUTODESK Forma ReTrace** PNG, with proportional CSS display scaling. The original source logo remains preserved. The previous SVG compositions remain historical alternates. See [appearance notes](docs/APPEARANCE.md), [logo assets](docs/BRAND-ASSETS.md), and [rename compatibility notes](docs/REBRANDING.md).
 
 Version **0.3** adds a weekly decision queue, BIM-optional stable scope and dossiers, explicit reference mappings, planned field assignments, a persistent browser capture queue, versioned measurement templates, local follow-through tracking, purpose-based packets, lookahead/handover checklists and a bounded research evaluation workbench. [Delivery status, walkthrough and remaining dependencies](docs/development/BROADER-STATUS.md). These are local human-reviewed workflows; shared mobile deployment, live Autodesk publication and actual recognition accuracy remain unverified.
 
@@ -23,7 +23,7 @@ npm run build
 npm start
 ```
 
-Open **http://localhost:8080/**. You can also double-click `Start Forma ReCap.command`. Keep its terminal open while using the application. The app binds to the local computer only.
+Open **http://localhost:8080/**. You can also double-click `Start Forma ReTrace.command`. Keep its terminal open while using the application. The app binds to the local computer only.
 
 The application defaults to `fixture` mode and runs locally without APS credentials. `.env.example` contains variable names and safe defaults only. For live APS project discovery, copy it to a private `.env` and supply your own application credentials and project-bearing hub. `.env` is ignored by Git and excluded from shareable bundles.
 
