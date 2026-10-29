@@ -5,9 +5,10 @@ import { join } from 'node:path';
 import { createApp, loadConfig } from './index.ts';
 import { setupDemo } from '../scripts/demo-setup.ts';
 
-const primaryOrigin = 'https://forma-recap.vercel.app';
+const primaryOrigin = 'https://forma-retrace.vercel.app';
+const legacyOrigin = 'https://forma-recap.vercel.app';
 export function publicDemoOrigins(env: NodeJS.ProcessEnv = process.env) {
-  const origins = new Set([primaryOrigin]);
+  const origins = new Set([primaryOrigin, legacyOrigin]);
   if (env.VERCEL === '1') for (const name of ['VERCEL_URL','VERCEL_PROJECT_PRODUCTION_URL']) {
     const host=env[name];
     if (host && /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.vercel\.app$/i.test(host)) origins.add(`https://${host.toLowerCase()}`);

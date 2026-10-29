@@ -8,7 +8,9 @@ import { join, resolve } from 'node:path';
 import { once } from 'node:events';
 import { createApp, loadConfig } from '../server/index.ts';
 import { createPublicDemoHandler, publicDemoOrigins } from '../server/vercel-demo.ts';
-const host='forma-recap.vercel.app';
+const host='forma-retrace.vercel.app';
+const legacyHost='forma-recap.vercel.app';
+const staticOrigins=[`https://${host}`,`https://${legacyHost}`];
 type Result={status:number;headers:IncomingHttpHeaders;body:Buffer;json:()=>any};
 async function serving(t:{after:(callback:()=>Promise<void>)=>void}) {
   const directory=mkdtempSync(join(tmpdir(),'forma-recap-vercel-'));
@@ -26,9 +28,25 @@ async function serving(t:{after:(callback:()=>Promise<void>)=>void}) {
 }
 
 test('public demo host origins are exact and platform aliases cannot come from arbitrary environment or request headers',()=>{
-  assert.deepEqual(publicDemoOrigins({VERCEL_URL:'attacker.example'}),['https://forma-recap.vercel.app']);
-  assert.deepEqual(publicDemoOrigins({VERCEL:'1',VERCEL_URL:'forma-recap-preview-team.vercel.app',VERCEL_PROJECT_PRODUCTION_URL:'forma-recap.vercel.app'}),['https://forma-recap.vercel.app','https://forma-recap-preview-team.vercel.app']);
-  for(const value of ['https://evil.vercel.app','evil.example','evil.vercel.app/path','evil.vercel.app:443','evil.vercel.app@attacker.example'])assert.deepEqual(publicDemoOrigins({VERCEL:'1',VERCEL_URL:value}),['https://forma-recap.vercel.app']);
+  assert.deepEqual(publicDemoOrigins({}),staticOrigins);
+  assert.deepEqual(publicDemoOrigins({VERCEL_URL:'attacker.example'}),staticOrigins);
+  assert.deepEqual(publicDemoOrigins({VERCEL_URL:'forma-retrace-preview-team.vercel.app'}),staticOrigins);
+  assert.deepEqual(publicDemoOrigins({VERCEL:'1',VERCEL_URL:'forma-retrace-preview-team.vercel.app',VERCEL_PROJECT_PRODUCTION_URL:host}),[...staticOrigins,'https://forma-retrace-preview-team.vercel.app']);
+  for(const value of ['https://evil.vercel.app','evil.example','evil.vercel.app/path','evil.vercel.app:443','evil.vercel.app@attacker.example'])assert.deepEqual(publicDemoOrigins({VERCEL:'1',VERCEL_URL:value}),staticOrigins);
+});
+
+test('renamed and legacy production aliases serve the same read-only fixture without platform environment variables',async t=>{
+  const {request}=await serving(t);
+  const snapshots=[];
+  for(const alias of [host,legacyHost]){
+    const headers={Host:alias,Origin:`https://${alias}`};
+    const bootstrap=await request('/api/bootstrap',{headers});assert.equal(bootstrap.status,200);assert.equal(bootstrap.json().deployment.read_only,true);assert.equal(bootstrap.headers['set-cookie'],undefined);
+    const fixture=await request('/api/v2/fixture/bootstrap',{headers});assert.equal(fixture.status,200);snapshots.push(fixture.json());
+    const write=await request('/api/v2/fixture/findings',{method:'POST',headers,body:'not JSON'});assert.equal(write.status,405);assert.match(write.json().error,/read-only/);
+    assert.equal((await request('/api/v2/local/bootstrap',{headers})).status,409);
+    assert.equal((await request('/auth/login',{headers})).status,403);
+  }
+  assert.deepEqual(snapshots[0],snapshots[1]);
 });
 
 test('anonymous cloud reads preserve fixed synthetic records, media, packets and deployment labels without sessions',async t=>{
@@ -58,8 +76,12 @@ test('public demo rejects edits before reading bodies, private/local workspaces 
 
 test('public demo rejects foreign hosts, HTTP origins, cross-site requests and conflicting rewrite routing',async t=>{
   const {request}=await serving(t);
-  for(const headers of [{Host:'attacker.example'},{Host:'localhost:8080'},{Origin:'http://forma-recap.vercel.app'},{Origin:'https://attacker.example'},{'Sec-Fetch-Site':'cross-site'},{Host:'attacker.example','X-Forwarded-Host':host}] as Record<string,string>[])assert.equal((await request('/api/bootstrap',{headers})).status,403);
-  assert.equal((await request('/api/bootstrap',{headers:{Origin:'https://forma-recap.vercel.app'}})).status,200);
+  for(const headers of [{Host:'attacker.example'},{Host:'localhost:8080'},{Origin:`http://${host}`},{Origin:`http://${legacyHost}`},{Origin:'https://attacker.example'},{'Sec-Fetch-Site':'cross-site'},{Host:'attacker.example','X-Forwarded-Host':host}] as Record<string,string>[])assert.equal((await request('/api/bootstrap',{headers})).status,403);
+  for(const lookalike of ['evil-forma-retrace.vercel.app','forma-retrace.vercel.app.attacker.example','forma-retrace.vercel.app:443','forma-retrace.vercel.app.']){
+    assert.equal((await request('/api/bootstrap',{headers:{Host:lookalike}})).status,403);
+    assert.equal((await request('/api/bootstrap',{headers:{Origin:`https://${lookalike}`}})).status,403);
+  }
+  assert.equal((await request('/api/bootstrap',{headers:{Origin:`https://${host}`}})).status,200);
   const rewritten=await request('/api/index?__forma_route=/api/v2/fixture/coverage&as_of_date=2026-10-19&freshness_days=7');assert.equal(rewritten.status,200);assert.equal(rewritten.json().freshness_days,7);assert.equal(rewritten.json().as_of_date,'2026-10-19');
   assert.equal((await request('/api/bootstrap?__forma_route=/api/bootstrap')).status,200,'A preserved original pathname may carry its matching rewrite marker.');
   for(const path of ['/api/bootstrap?__forma_route=/api/v2/fixture/bootstrap','/api/index?__forma_route=/api/bootstrap&__forma_route=/api/exports','/api/index?__forma_route=//attacker.example/api/bootstrap','/api/index?__forma_route=/api/../bootstrap'])assert.equal((await request(path)).status,400);
@@ -74,6 +96,6 @@ test('separate public function instances expose identical saved snapshots withou
 });
 
 test('public deployment cannot accidentally receive APS credentials or live mode',()=>{
-  const deployment={kind:'public_demo',read_only:true,label:'Public synthetic demo',persistence:'fixed_snapshot',allowedOrigins:['https://forma-recap.vercel.app']} as const;
+  const deployment={kind:'public_demo',read_only:true,label:'Public synthetic demo',persistence:'fixed_snapshot',allowedOrigins:[`https://${host}`]} as const;
   for(const env of [{APP_MODE:'live'},{APS_CLIENT_ID:'credential'},{APS_CLIENT_SECRET:'credential'},{APS_HUB_ID:'real-hub'}])assert.throws(()=>createApp(loadConfig(env),{deployment:{...deployment,allowedOrigins:[...deployment.allowedOrigins]}}),/cannot use live mode or APS/);
 });

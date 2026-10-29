@@ -14,9 +14,15 @@ The local application remains writable and persistent through `npm start`. The i
 
 ## Connected GitHub project
 
-Vercel should use the repository root, the Vite framework preset, the repository's `vercel.json`, and Node.js **24.x**. A commit to the connected production branch triggers Vercel's normal deployment. The configured public host is `forma-recap.vercel.app`; Vercel-provided deployment hosts can be accepted only through trusted platform environment metadata. Arbitrary Host or forwarded-host values do not expand the allowlist.
+Vercel should use the repository root, the Vite framework preset, the repository's `vercel.json`, and Node.js **24.x**. A commit to the connected production branch triggers Vercel's normal deployment. The configured public host is `forma-retrace.vercel.app`; the original `forma-recap.vercel.app` remains an exact compatibility alias. Vercel-provided deployment hosts can be accepted only through trusted platform environment metadata. Arbitrary Host or forwarded-host values do not expand the allowlist.
 
 If a project-level override conflicts with repository configuration, inspect the deployment build log and restore the root/build/output settings above. A frontend page loading successfully does not establish that its APIs deployed successfully: check both bootstrap endpoints and an original-media/packet route.
+
+### Renamed host returns 403
+
+`Workspace unavailable` with `Invalid public demo host` means the frontend loaded, but the API rejected its request hostname before returning workspace data. The October 29, 2026 rename left the original host as the only static allowlist entry. The source-connected Vercel project serves `forma-retrace.vercel.app`, so it needs that exact hostname in `publicDemoOrigins` even when production-alias environment metadata is unavailable. The correction adds the renamed host and retains the original alias; it does not accept arbitrary Vercel hosts, infer trust from request headers, enable edits or enable APS access.
+
+After deploying, verify `/api/bootstrap`, `/api/v2/fixture/bootstrap`, one source-media route and a fixed packet report. Confirm the bootstrap identifies a public synthetic read-only deployment and that mutation, private workspace and authentication routes remain blocked.
 
 ## Validation and future cloud editing
 

@@ -11,8 +11,8 @@ Version **0.3** adds a weekly decision queue, BIM-optional stable scope and doss
 Requires Node.js **24.19 or later**. Get the source:
 
 ```sh
-git clone https://github.com/rachermatt/forma-recap.git
-cd forma-recap
+git clone https://github.com/rachermatt/forma-retrace-demo.git
+cd forma-retrace-demo
 ```
 
 For an initially unreviewed workspace:
@@ -29,7 +29,7 @@ The application defaults to `fixture` mode and runs locally without APS credenti
 
 ## Run the saved synthetic demonstration
 
-The [hosted Vercel demo](https://forma-recap.vercel.app) presents the saved synthetic example as a public **read-only fixed snapshot**. [Vercel deployment notes](docs/VERCEL.md) explain its API adapter and storage boundary. Use the local commands below for editable review and photograph import.
+The [hosted Vercel demo](https://forma-retrace.vercel.app) presents the saved synthetic example as a public **read-only fixed snapshot**. [Vercel deployment notes](docs/VERCEL.md) explain its API adapter and storage boundary. Use the local commands below for editable review and photograph import.
 
 The repository includes the completed acceptance example as a versioned, readable synthetic seed and preserved packet files. It restores the saved record IDs, annotations, correction history, recapture/reassessment links, manual reconciliation and local RFI draft. It contains no local photograph workspace, live APS data, credentials or sessions.
 
